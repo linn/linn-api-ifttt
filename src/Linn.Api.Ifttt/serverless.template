@@ -4,6 +4,10 @@
   "Description" : "An AWS Serverless Application that uses the ASP.NET Core framework running in Amazon Lambda.",
 
   "Parameters" : {
+    "DiscoveryEndpoint": {
+        "Type": "String",
+        "Description": "The Open Identity Server Discovery Endpoint to use"
+    }
   },
 
   "Conditions" : {
@@ -23,6 +27,7 @@
         "Policies": [ "AWSLambdaFullAccess" ],
         "Environment" : {
           "Variables" : {
+            "discoveryEndpoint": { "Ref" : "DiscoveryEndpoint" }
           }
         },
         "Events": {
