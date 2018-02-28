@@ -1,15 +1,13 @@
-namespace Linn.Api.Ifttt
+namespace Linn.Api.Ifttt.Tests
 {
-    using Linn.Api.Ifttt.Controllers;
-
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    public class Startup
+    public class TestingStartup
     {
-        public Startup(IConfiguration configuration)
+        public TestingStartup(IConfiguration configuration)
         {
             this.Configuration = configuration;
         }
@@ -20,7 +18,6 @@ namespace Linn.Api.Ifttt
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddSingleton<IUserResourceFactory>(i => new UserResourceFactory(this.Configuration["discoveryEndpoint"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

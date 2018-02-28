@@ -7,7 +7,11 @@ namespace Linn.Api.Ifttt.Tests
 
     using FluentAssertions;
 
+    using Linn.Api.Ifttt.Controllers;
+
     using Newtonsoft.Json;
+
+    using NSubstitute;
 
     using Resources;
 
@@ -19,9 +23,16 @@ namespace Linn.Api.Ifttt.Tests
 
         private readonly APIGatewayProxyResponse response;
 
+        private readonly UserInfoResource userInfoResource;
+
         public UserInfoControllerTests()
         {
-            var lambdaFunction = new LambdaEntryPoint();
+            this.userInfoResource = new UserInfoResource("A.N. Other", "/sub/userid");
+
+            var userResourceFactory = Substitute.For<IUserResourceFactory>();
+            userResourceFactory.Create("token").Returns(this.userInfoResource);
+
+            var lambdaFunction = new LambdaTestingEntryPoint(userResourceFactory);
 
             var requestStr = File.ReadAllText("./SampleRequests/UserInfoController-Get.json");
             var request = JsonConvert.DeserializeObject<APIGatewayProxyRequest>(requestStr);
@@ -46,19 +57,19 @@ namespace Linn.Api.Ifttt.Tests
         [Fact]
         public void ShouldContainName()
         {
-            this.result.Data.Name.Should().Be("A.N. User");
+            this.result.Data.Name.Should().Be(this.userInfoResource.Name);
         }
 
         [Fact]
         public void ShouldContainId()
         {
-            this.result.Data.Id.Should().Be("/sub/userid");
+            this.result.Data.Id.Should().Be(this.userInfoResource.Id);
         }
 
         [Fact]
         public void ShouldNotContainAUrl()
         {
-            this.result.Data.Url.Should().BeNullOrEmpty();
+            this.result.Data.Url.Should().Be(this.userInfoResource.Url);
         }
     }
 }

@@ -7,15 +7,13 @@ namespace Linn.Api.Ifttt.Controllers
 
     using Linn.Api.Ifttt.Resources;
 
-    using Microsoft.Extensions.Configuration;
-
     public class UserResourceFactory : IUserResourceFactory
     {
         private readonly Task<DiscoveryResponse> discoveryResponseTask;
 
-        public UserResourceFactory(IConfiguration configuration)
+        public UserResourceFactory(string discoveryEndpoint)
         {
-            var discoveryClient = new DiscoveryClient(configuration["discoveryEndpoint"]);
+            var discoveryClient = new DiscoveryClient(discoveryEndpoint);
             this.discoveryResponseTask = discoveryClient.GetAsync();
         }
 
