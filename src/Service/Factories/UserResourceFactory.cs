@@ -1,4 +1,4 @@
-namespace Linn.Api.Ifttt.Controllers
+namespace Linn.Api.Ifttt.Service.Factories
 {
     using System.Linq;
     using System.Threading.Tasks;
