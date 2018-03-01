@@ -1,11 +1,8 @@
-namespace Linn.Api.Ifttt.Testing.Integration
+namespace Linn.Api.Ifttt.Testing.Integration.Modules
 {
     using System;
     using System.Net;
     using System.Net.Http;
-    using System.Net.Http.Headers;
-
-    using Botwin;
 
     using FluentAssertions;
 
@@ -13,12 +10,7 @@ namespace Linn.Api.Ifttt.Testing.Integration
     using Linn.Api.Ifttt.Service.Factories;
     using Linn.Api.Ifttt.Service.Modules;
 
-    using Microsoft.AspNetCore;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
-
-    using Newtonsoft.Json;
 
     using NSubstitute;
 
@@ -30,7 +22,7 @@ namespace Linn.Api.Ifttt.Testing.Integration
 
         private readonly UserInfoResource userInfoResource;
 
-        private IftttDataResource<UserInfoResource> result;
+        private readonly IftttDataResource<UserInfoResource> result;
 
         public WhenGettingUserInfo()
         {
@@ -41,24 +33,14 @@ namespace Linn.Api.Ifttt.Testing.Integration
             var userInfoResourceFactory = Substitute.For<IUserResourceFactory>();
             userInfoResourceFactory.Create(accessToken).Returns(this.userInfoResource);
 
-            var server = new TestServer(
-                WebHost.CreateDefaultBuilder()
-                .ConfigureServices(
-                    services =>
-                        {
-                            services.AddBotwin(typeof(UserInfoModule).Assembly);
-                            services.AddSingleton(userInfoResourceFactory);
-                        })
-                        .Configure(app => app.UseBotwin()));
-
-            var client = server.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var client = new TestClient()
+                .WithAssembly(typeof(UserInfoModule).Assembly)
+                .WithAccessToken(accessToken)
+                .With(s => s.AddSingleton(userInfoResourceFactory));
 
             this.response = client.GetAsync("/ifttt/v1/user/info").Result;
 
-            this.result =
-                JsonConvert.DeserializeObject<IftttDataResource<UserInfoResource>>(
-                    this.response.Content.ReadAsStringAsync().Result);
+            this.result = this.response.JsonBody<IftttDataResource<UserInfoResource>>();
         }
 
         [Fact]
