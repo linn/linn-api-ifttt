@@ -4,6 +4,7 @@ namespace Linn.Api.Ifttt
 
     using Linn.Api.Ifttt.Proxies;
     using Linn.Api.Ifttt.Service.Factories;
+    using Linn.Api.Ifttt.Service.Modules;
     using Linn.Common.Proxy;
 
     using Microsoft.AspNetCore.Builder;
@@ -22,7 +23,7 @@ namespace Linn.Api.Ifttt
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddBotwin();
+            services.AddBotwin(typeof(UserInfoModule).Assembly);
 
             services.AddSingleton<IUserResourceFactory>(
                 i => new UserResourceFactory(this.Configuration["discoveryEndpoint"]));

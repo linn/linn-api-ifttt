@@ -10,6 +10,8 @@ namespace Linn.Api.Ifttt.Proxies
     using Linn.Api.Ifttt.Resources.Linn;
     using Linn.Common.Proxy;
 
+    using Newtonsoft.Json;
+
     public class LinnApiActions : ILinnApiActions
     {
         private readonly IRestClient restClient;
@@ -32,10 +34,13 @@ namespace Linn.Api.Ifttt.Proxies
                 return null;
             }
 
-            await Task.WhenAll(
-                playersResponse.Value.Select(p => p.Links.FirstOrDefault(l => l.Rel == "standby")?.Href)
-                    .Where(s => !string.IsNullOrEmpty(s)).Select(
-                        href => this.restClient.Put(ct, new Uri($"{this.apiRoot}{href}"), null, headers, null)));
+            var tasks = playersResponse.Value
+                .Select(p => p.Links.FirstOrDefault(l => l.Rel == "standby")?.Href)
+                .Where(s => !string.IsNullOrEmpty(s))
+                .Select(href => new Uri($"{this.apiRoot}{href}"))
+                .Select(uri => this.restClient.Put(ct, uri, null, headers, null));
+
+            await Task.WhenAll(tasks);
 
             return DateTime.UtcNow.ToString("o");
         }
