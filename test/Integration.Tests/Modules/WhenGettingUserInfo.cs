@@ -1,46 +1,34 @@
 namespace Linn.Api.Ifttt.Testing.Integration.Modules
 {
-    using System;
     using System.Net;
     using System.Net.Http;
 
     using FluentAssertions;
 
-    using Linn.Api.Ifttt.Resources;
-    using Linn.Api.Ifttt.Service.Factories;
-    using Linn.Api.Ifttt.Service.Modules;
-
-    using Microsoft.Extensions.DependencyInjection;
+    using Linn.Api.Ifttt.Resources.Ifttt;
 
     using NSubstitute;
 
     using Xunit;
 
-    public class WhenGettingUserInfo
+    public class WhenGettingUserInfo : ContextBase
     {
         private readonly HttpResponseMessage response;
 
         private readonly UserInfoResource userInfoResource;
 
-        private readonly IftttDataResource<UserInfoResource> result;
+        private readonly DataResource<UserInfoResource> result;
 
         public WhenGettingUserInfo()
         {
-            var accessToken = Guid.NewGuid().ToString();
-
             this.userInfoResource = new UserInfoResource("A.N. Other", "/sub/myid");
+            this.UserInfoResourceFactory.Create(this.AccessToken).Returns(this.userInfoResource);
 
-            var userInfoResourceFactory = Substitute.For<IUserResourceFactory>();
-            userInfoResourceFactory.Create(accessToken).Returns(this.userInfoResource);
+            this.Client.SetAccessToken(this.AccessToken);
 
-            var client = new TestClient()
-                .WithAssembly(typeof(UserInfoModule).Assembly)
-                .WithAccessToken(accessToken)
-                .With(s => s.AddSingleton(userInfoResourceFactory));
+            this.response = this.Client.GetAsync("/ifttt/v1/user/info").Result;
 
-            this.response = client.GetAsync("/ifttt/v1/user/info").Result;
-
-            this.result = this.response.JsonBody<IftttDataResource<UserInfoResource>>();
+            this.result = this.response.JsonBody<DataResource<UserInfoResource>>();
         }
 
         [Fact]

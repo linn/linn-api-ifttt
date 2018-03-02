@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+      <AssemblyName>Linn.Api.Ifttt.Testing.Unit</AssemblyName>
+
+      <RootNamespace>Linn.Api.Ifttt.Testing.Unit</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+      <PackageReference Include="FluentAssertions" Version="5.1.2" />
+      <PackageReference Include="NSubstitute" Version="3.1.0" />
+      <PackageReference Include="xunit" Version="2.3.1" />
+      <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Service\Service.csproj" />
+  </ItemGroup>
+
+</Project>

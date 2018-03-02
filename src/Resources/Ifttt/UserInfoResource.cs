@@ -1,4 +1,4 @@
-﻿namespace Linn.Api.Ifttt.Resources
+﻿namespace Linn.Api.Ifttt.Resources.Ifttt
 {
     public class UserInfoResource
     {
