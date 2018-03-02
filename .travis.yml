@@ -8,3 +8,4 @@ before_install:
   - export PATH=~/bin:$PATH
 script:
   - dotnet test test/Integration.Tests/
+  - dotnet test test/Unit.Tests/

@@ -2,7 +2,10 @@ namespace Linn.Api.Ifttt
 {
     using Botwin;
 
+    using Linn.Api.Ifttt.Proxies;
     using Linn.Api.Ifttt.Service.Factories;
+    using Linn.Api.Ifttt.Service.Modules;
+    using Linn.Common.Proxy;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
@@ -20,10 +23,12 @@ namespace Linn.Api.Ifttt
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddBotwin();
+            services.AddBotwin(typeof(UserInfoModule).Assembly);
 
             services.AddSingleton<IUserResourceFactory>(
                 i => new UserResourceFactory(this.Configuration["discoveryEndpoint"]));
+            services.AddSingleton<ILinnApiActions>(
+                i => new LinnApiActions(new RestClient(10000), this.Configuration["apiRoot"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

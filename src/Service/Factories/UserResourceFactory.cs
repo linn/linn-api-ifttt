@@ -1,11 +1,12 @@
 namespace Linn.Api.Ifttt.Service.Factories
 {
     using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
 
     using IdentityModel.Client;
 
-    using Linn.Api.Ifttt.Resources;
+    using Linn.Api.Ifttt.Resources.Ifttt;
 
     public class UserResourceFactory : IUserResourceFactory
     {
@@ -23,6 +24,11 @@ namespace Linn.Api.Ifttt.Service.Factories
             var userInfoClient = new UserInfoClient(doc.UserInfoEndpoint);
 
             var userInfoResponse = await userInfoClient.GetAsync(accessToken);
+
+            if (userInfoResponse.HttpStatusCode != HttpStatusCode.OK)
+            {
+                return null;
+            }
 
             var email = userInfoResponse.Claims.First(c => c.Type == "email").Value;
             var accountId = userInfoResponse.Claims.First(c => c.Type == "sub").Value;

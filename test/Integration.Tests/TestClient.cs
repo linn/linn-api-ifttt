@@ -2,7 +2,6 @@
 {
     using System;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Reflection;
 
     using Botwin;
@@ -14,19 +13,11 @@
 
     public class TestClient
     {
-        private string accessToken;
-
         private Assembly assembly;
 
         public TestClient WithAssembly(Assembly serviceAssembly)
         {
             this.assembly = serviceAssembly;
-            return this;
-        }
-
-        public TestClient WithAccessToken(string token)
-        {
-            this.accessToken = token;
             return this;
         }
 
@@ -43,11 +34,6 @@
                     .Configure(app => app.UseBotwin()));
 
             var client = server.CreateClient();
-
-            if (!string.IsNullOrEmpty(this.accessToken))
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.accessToken);
-            }
 
             return client;
         }

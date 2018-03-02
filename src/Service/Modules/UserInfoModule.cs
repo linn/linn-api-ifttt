@@ -3,7 +3,7 @@ namespace Linn.Api.Ifttt.Service.Modules
     using Botwin;
     using Botwin.Response;
 
-    using Linn.Api.Ifttt.Resources;
+    using Linn.Api.Ifttt.Resources.Ifttt;
     using Linn.Api.Ifttt.Service.Factories;
 
     public class UserInfoModule : BotwinModule
@@ -23,8 +23,16 @@ namespace Linn.Api.Ifttt.Service.Modules
                         else
                         {
                             var userInfoResource = await userResourceFactory.Create(accessToken);
-                            var resource = new IftttDataResource<UserInfoResource>(userInfoResource);
-                            await res.AsJson(resource);
+
+                            if (userInfoResource == null)
+                            {
+                                res.StatusCode = 401;
+                            }
+                            else
+                            {
+                                var resource = new DataResource<UserInfoResource>(userInfoResource);
+                                await res.AsJson(resource);
+                            }
                         }
                     });
         }

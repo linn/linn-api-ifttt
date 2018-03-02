@@ -7,6 +7,10 @@
     "DiscoveryEndpoint": {
         "Type": "String",
         "Description": "The Open Identity Server Discovery Endpoint to use"
+    },
+    "ApiRoot": {
+        "Type": "String",
+        "Description": "The Root of the Linn Api"
     }
   },
 
@@ -27,7 +31,8 @@
         "Policies": [ "AWSLambdaFullAccess" ],
         "Environment" : {
           "Variables" : {
-            "discoveryEndpoint": { "Ref" : "DiscoveryEndpoint" }
+            "discoveryEndpoint": { "Ref" : "DiscoveryEndpoint" },
+            "apiRoot": { "Ref" : "ApiRoot" }
           }
         },
         "Events": {
