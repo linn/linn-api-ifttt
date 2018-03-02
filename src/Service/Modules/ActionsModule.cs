@@ -1,7 +1,5 @@
 ﻿namespace Linn.Api.Ifttt.Service.Modules
 {
-    using System.Threading;
-
     using Botwin;
     using Botwin.Response;
 
@@ -16,7 +14,7 @@
                 "/ifttt/v1/actions/turn_off_all_devices",
                 async (req, res, routeData) =>
                     {
-                        var id = await linnApiProxy.TurnOfAllDevices(req.GetAccessToken(), CancellationToken.None);
+                        var id = await linnApiProxy.TurnOfAllDevices(req.GetAccessToken(), req.HttpContext.RequestAborted);
                         var resource = new[] { new ActionResponseResource { Id = id } };
                         await res.AsJson(new DataResource<ActionResponseResource[]>(resource));
                     });
