@@ -27,7 +27,7 @@
         {
             this.accessToken = Guid.NewGuid().ToString();
 
-            this.players = new[] { Generate(), Generate(), Generate() };
+            this.players = new[] { GeneratePlayerResource(), GeneratePlayerResource(), GeneratePlayerResource() };
 
             var response = Substitute.For<IRestResponse<PlayerResource[]>>();
             response.StatusCode.Returns(HttpStatusCode.OK);
@@ -40,7 +40,7 @@
                     Arg.Is<Dictionary<string, string[]>>(d => d["Authorization"][0] == $"Bearer {this.accessToken}"))
                 .Returns(response);
 
-            this.result = this.Sut.TurnOfAllDevices(this.accessToken, CancellationToken.None).Result;
+            this.result = this.Sut.TurnOffAllDevices(this.accessToken, CancellationToken.None).Result;
         }
 
         [Fact]
@@ -62,14 +62,6 @@
                     Arg.Is<Dictionary<string, string[]>>(d => d["Authorization"][0] == $"Bearer {this.accessToken}"),
                     Arg.Any<object>());
             }
-        }
-
-        private static PlayerResource Generate()
-        {
-            var id = Guid.NewGuid().ToString();
-            var playerResource = new PlayerResource { Id = id };
-            playerResource.Links.Add(new LinkResource("standby", $"/{Guid.NewGuid().ToString()}"));
-            return playerResource;
         }
     }
 }

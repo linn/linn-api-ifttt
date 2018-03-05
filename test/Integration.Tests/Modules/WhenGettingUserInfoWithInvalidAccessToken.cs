@@ -3,6 +3,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
     using System;
     using System.Net;
     using System.Net.Http;
+    using System.Threading;
 
     using FluentAssertions;
 
@@ -21,7 +22,8 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         public WhenGettingUserInfoWithInvalidAccessToken()
         {
             var userInfoResource = new UserInfoResource("A.N. Other", "/sub/myid");
-            this.UserInfoResourceFactory.Create(this.AccessToken).Returns(userInfoResource);
+
+            this.UserInfoResourceFactory.Create(this.AccessToken, Arg.Any<CancellationToken>()).Returns(userInfoResource);
 
             this.Client.SetAccessToken(Guid.NewGuid().ToString());
 

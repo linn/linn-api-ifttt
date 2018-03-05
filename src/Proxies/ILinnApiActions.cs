@@ -1,10 +1,15 @@
 ﻿namespace Linn.Api.Ifttt.Proxies
 {
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
 
     public interface ILinnApiActions
     {
-        Task<string> TurnOfAllDevices(string accessToken, CancellationToken ct);
+        Task<string> TurnOffAllDevices(string accessToken, CancellationToken ct);
+
+        Task<string> TurnOffDevice(string accessToken, string deviceId, CancellationToken ct);
+
+        Task<IDictionary<string, string>> GetDeviceNames(string accessToken, CancellationToken ct);
     }
 }

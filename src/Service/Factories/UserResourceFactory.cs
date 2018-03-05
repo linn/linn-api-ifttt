@@ -2,6 +2,7 @@ namespace Linn.Api.Ifttt.Service.Factories
 {
     using System.Linq;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using IdentityModel.Client;
@@ -18,12 +19,12 @@ namespace Linn.Api.Ifttt.Service.Factories
             this.discoveryResponseTask = discoveryClient.GetAsync();
         }
 
-        public async Task<UserInfoResource> Create(string accessToken)
+        public async Task<UserInfoResource> Create(string accessToken, CancellationToken ct)
         {
             var doc = await this.discoveryResponseTask;
             var userInfoClient = new UserInfoClient(doc.UserInfoEndpoint);
 
-            var userInfoResponse = await userInfoClient.GetAsync(accessToken);
+            var userInfoResponse = await userInfoClient.GetAsync(accessToken, ct);
 
             if (userInfoResponse.HttpStatusCode != HttpStatusCode.OK)
             {

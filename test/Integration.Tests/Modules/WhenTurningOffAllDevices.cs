@@ -14,13 +14,13 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
     using Xunit;
 
-    public class WhenTurningOfAllDevices : ContextBase
+    public class WhenTurningOffAllDevices : ContextBase
     {
         private readonly HttpResponseMessage response;
 
         private readonly DataResource<ActionResponseResource[]> result;
 
-        public WhenTurningOfAllDevices()
+        public WhenTurningOffAllDevices()
         {
             var request = new
                               {
@@ -31,7 +31,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
             var content = new StringContent(JsonConvert.SerializeObject(request));
 
-            this.LinnApiActions.TurnOfAllDevices(this.AccessToken, Arg.Any<CancellationToken>()).Returns("id");
+            this.LinnApiActions.TurnOffAllDevices(this.AccessToken, Arg.Any<CancellationToken>()).Returns("id");
 
             this.Client.SetAccessToken(this.AccessToken);
 
