@@ -1,6 +1,6 @@
 ﻿namespace Linn.Api.Ifttt.Resources.Ifttt
 {
-    public class ActionResponseResource
+    public class ActionResponse
     {
         public string Id { get; set; }
 

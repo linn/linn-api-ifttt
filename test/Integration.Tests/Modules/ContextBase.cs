@@ -6,6 +6,7 @@
     using Linn.Api.Ifttt.Proxies;
     using Linn.Api.Ifttt.Service.Factories;
     using Linn.Api.Ifttt.Service.Modules;
+    using Linn.Common.Configuration;
 
     using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,10 @@
         public ContextBase()
         {
             this.AccessToken = Guid.NewGuid().ToString();
+
+            this.IftttServiceKey = "VALID_SERVICE_KEY";
+
+            ConfigurationManager.Configuration["iftttServiceKey"] = this.IftttServiceKey;
 
             this.UserInfoResourceFactory = Substitute.For<IUserResourceFactory>();
 
@@ -29,6 +34,8 @@
                         s.AddSingleton(this.LinnApiActions);
                     });
         }
+
+        protected string IftttServiceKey { get; }
 
         protected IUserResourceFactory UserInfoResourceFactory { get; }
 

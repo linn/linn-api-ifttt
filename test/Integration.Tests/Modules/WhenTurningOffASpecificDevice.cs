@@ -19,7 +19,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
     {
         private readonly HttpResponseMessage response;
 
-        private readonly DataResource<ActionResponseResource[]> result;
+        private readonly DataResource<ActionResponse[]> result;
 
         public WhenTurningOffASpecificDevice()
         {
@@ -40,7 +40,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
             this.response = this.Client.PostAsync("/ifttt/v1/actions/turn_off_device", content).Result;
 
-            this.result = this.response.JsonBody<DataResource<ActionResponseResource[]>>();
+            this.result = this.response.JsonBody<DataResource<ActionResponse[]>>();
         }
 
         [Fact]

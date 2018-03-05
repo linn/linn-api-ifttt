@@ -13,22 +13,15 @@ namespace Linn.Api.Ifttt
 
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            this.Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBotwin(typeof(UserInfoModule).Assembly);
 
             services.AddSingleton<IUserResourceFactory>(
-                i => new UserResourceFactory(this.Configuration["discoveryEndpoint"]));
+                i => new UserResourceFactory());
             services.AddSingleton<ILinnApiActions>(
-                i => new LinnApiActions(new RestClient(10000), this.Configuration["apiRoot"]));
+                i => new LinnApiActions(new RestClient(10000)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

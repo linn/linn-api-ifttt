@@ -8,14 +8,15 @@ namespace Linn.Api.Ifttt.Service.Factories
     using IdentityModel.Client;
 
     using Linn.Api.Ifttt.Resources.Ifttt;
+    using Linn.Common.Configuration;
 
     public class UserResourceFactory : IUserResourceFactory
     {
         private readonly Task<DiscoveryResponse> discoveryResponseTask;
 
-        public UserResourceFactory(string discoveryEndpoint)
+        public UserResourceFactory()
         {
-            var discoveryClient = new DiscoveryClient(discoveryEndpoint);
+            var discoveryClient = new DiscoveryClient(ConfigurationManager.Configuration["discoveryEndpoint"]);
             this.discoveryResponseTask = discoveryClient.GetAsync();
         }
 

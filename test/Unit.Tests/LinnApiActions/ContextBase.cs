@@ -4,6 +4,7 @@
 
     using Linn.Api.Ifttt.Proxies;
     using Linn.Api.Ifttt.Resources.Linn;
+    using Linn.Common.Configuration;
     using Linn.Common.Proxy;
 
     using NSubstitute;
@@ -13,7 +14,8 @@
         public ContextBase()
         {
             this.RestClient = Substitute.For<IRestClient>();
-            this.Sut = new LinnApiActions(this.RestClient, "http://localhost");
+            ConfigurationManager.Configuration["apiRoot"] = "http://localhost";
+            this.Sut = new LinnApiActions(this.RestClient);
         }
 
         protected IRestClient RestClient { get; }
