@@ -22,7 +22,7 @@ namespace Linn.Api.Ifttt.Service.Modules
                         }
                         else
                         {
-                            var userInfoResource = await userResourceFactory.Create(accessToken);
+                            var userInfoResource = await userResourceFactory.Create(accessToken, req.HttpContext.RequestAborted);
 
                             if (userInfoResource == null)
                             {
@@ -30,8 +30,7 @@ namespace Linn.Api.Ifttt.Service.Modules
                             }
                             else
                             {
-                                var resource = new DataResource<UserInfoResource>(userInfoResource);
-                                await res.AsJson(resource);
+                                await res.AsJson(new DataResource<UserInfoResource>(userInfoResource), req.HttpContext.RequestAborted);
                             }
                         }
                     });

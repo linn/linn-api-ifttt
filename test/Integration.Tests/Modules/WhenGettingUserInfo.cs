@@ -2,6 +2,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 {
     using System.Net;
     using System.Net.Http;
+    using System.Threading;
 
     using FluentAssertions;
 
@@ -22,7 +23,8 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         public WhenGettingUserInfo()
         {
             this.userInfoResource = new UserInfoResource("A.N. Other", "/sub/myid");
-            this.UserInfoResourceFactory.Create(this.AccessToken).Returns(this.userInfoResource);
+
+            this.UserInfoResourceFactory.Create(this.AccessToken, Arg.Any<CancellationToken>()).Returns(this.userInfoResource);
 
             this.Client.SetAccessToken(this.AccessToken);
 
