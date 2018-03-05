@@ -13,15 +13,17 @@
     {
         public ActionsModule(ILinnApiActions linnApiProxy)
         {
+            this.RequiresAccessToken();
+
             this.Post(
                 "/ifttt/v1/actions/turn_off_all_devices",
                 async (req, res, routeData) =>
                     {
-                        var id = await linnApiProxy.TurnOffAllDevices(req.GetAccessToken(), req.HttpContext.RequestAborted);
+                        var actionResponseId = await linnApiProxy.TurnOffAllDevices(req.GetAccessToken(), req.HttpContext.RequestAborted);
 
-                        var resource = new[] { new ActionResponseResource { Id = id } };
+                        var resource = new[] { new ActionResponse { Id = actionResponseId } };
 
-                        await res.AsJson(new DataResource<ActionResponseResource[]>(resource), req.HttpContext.RequestAborted);
+                        await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
                     });
 
             this.Post(
@@ -30,11 +32,11 @@
                     {
                         var model = req.Bind<ActionRequestResource>();
 
-                        var id = await linnApiProxy.TurnOffDevice(req.GetAccessToken(), model.ActionFields["device_id"], req.HttpContext.RequestAborted);
+                        var actionResponseId = await linnApiProxy.TurnOffDevice(req.GetAccessToken(), model.ActionFields["device_id"], req.HttpContext.RequestAborted);
 
-                        var resource = new[] { new ActionResponseResource { Id = id } };
+                        var resource = new[] { new ActionResponse { Id = actionResponseId } };
 
-                        await res.AsJson(new DataResource<ActionResponseResource[]>(resource), req.HttpContext.RequestAborted);
+                        await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
                     });
 
             this.Post(
@@ -43,9 +45,9 @@
                     {
                         var players = await linnApiProxy.GetDeviceNames(req.GetAccessToken(), req.HttpContext.RequestAborted);
 
-                        var resource = players.Select(p => new ActionFieldOption { Label = p.Value, Value = p.Key }).ToArray();
+                        var actionFieldOptions = players.Select(p => new ActionFieldOption { Label = p.Value, Value = p.Key }).ToArray();
 
-                        await res.AsJson(new DataResource<ActionFieldOption[]>(resource), req.HttpContext.RequestAborted);
+                        await res.AsJson(new DataResource<ActionFieldOption[]>(actionFieldOptions), req.HttpContext.RequestAborted);
                     });
         }
     }

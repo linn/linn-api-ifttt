@@ -1,5 +1,7 @@
 namespace Linn.Api.Ifttt.Service.Modules
 {
+    using System.Threading.Tasks;
+
     using Botwin;
     using Botwin.Response;
 
@@ -10,28 +12,21 @@ namespace Linn.Api.Ifttt.Service.Modules
     {
         public UserInfoModule(IUserResourceFactory userResourceFactory)
         {
+            this.RequiresAccessToken();
+
             this.Get(
                 "/ifttt/v1/user/info",
                 async (req, res, routeData) =>
                     {
-                        var accessToken = req.GetAccessToken();
+                        var userInfoResource = await userResourceFactory.Create(req.GetAccessToken(), req.HttpContext.RequestAborted);
 
-                        if (accessToken == null)
+                        if (userInfoResource == null)
                         {
                             res.StatusCode = 401;
                         }
                         else
                         {
-                            var userInfoResource = await userResourceFactory.Create(accessToken, req.HttpContext.RequestAborted);
-
-                            if (userInfoResource == null)
-                            {
-                                res.StatusCode = 401;
-                            }
-                            else
-                            {
-                                await res.AsJson(new DataResource<UserInfoResource>(userInfoResource), req.HttpContext.RequestAborted);
-                            }
+                            await res.AsJson(new DataResource<UserInfoResource>(userInfoResource), req.HttpContext.RequestAborted);
                         }
                     });
         }
