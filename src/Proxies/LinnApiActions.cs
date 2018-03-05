@@ -24,15 +24,13 @@ namespace Linn.Api.Ifttt.Proxies
 
         public async Task<string> TurnOffAllDevices(string accessToken, CancellationToken ct)
         {
-            var headers = new Dictionary<string, string[]> { ["Authorization"] = new[] { $"Bearer {accessToken}" } };
-
             var players = await this.ListAllPlayers(accessToken, ct);
 
             var tasks = players
                 .Select(p => p.Links.FirstOrDefault(l => l.Rel == "standby")?.Href)
                 .Where(s => !string.IsNullOrEmpty(s))
                 .Select(href => new Uri($"{this.apiRoot}{href}"))
-                .Select(uri => this.restClient.Put(ct, uri, null, headers, null));
+                .Select(uri => this.restClient.Put(ct, uri, null, Headers(accessToken), null));
 
             await Task.WhenAll(tasks);
 
@@ -41,27 +39,29 @@ namespace Linn.Api.Ifttt.Proxies
 
         public async Task<string> TurnOffDevice(string accessToken, string deviceId, CancellationToken ct)
         {
-            var headers = new Dictionary<string, string[]> { ["Authorization"] = new[] { $"Bearer {accessToken}" } };
-
             var uri = new Uri($"{this.apiRoot}/devices/{deviceId}/standby");
 
-            await this.restClient.Put(ct, uri, null, headers, null);
+            await this.restClient.Put(ct, uri, null, Headers(accessToken), null);
 
             return DateTime.UtcNow.ToString("o");
         }
 
-        public async Task<IDictionary<string, string>> FindAllDevices(string accessToken, CancellationToken ct)
+        public async Task<IDictionary<string, string>> GetDeviceNames(string accessToken, CancellationToken ct)
         {
             var players = await this.ListAllPlayers(accessToken, ct);
 
             return players.ToDictionary(p => p.Id, p => p.Name);
         }
 
-        private async Task<PlayerResource[]> ListAllPlayers(string accessToken, CancellationToken ct)
+        private static Dictionary<string, string[]> Headers(string accessToken)
         {
             var headers = new Dictionary<string, string[]> { ["Authorization"] = new[] { $"Bearer {accessToken}" } };
+            return headers;
+        }
 
-            var playersResponse = await this.restClient.Get<PlayerResource[]>(ct, new Uri($"{this.apiRoot}/players/"), null, headers);
+        private async Task<PlayerResource[]> ListAllPlayers(string accessToken, CancellationToken ct)
+        {
+            var playersResponse = await this.restClient.Get<PlayerResource[]>(ct, new Uri($"{this.apiRoot}/players/"), null, Headers(accessToken));
 
             return playersResponse.StatusCode != HttpStatusCode.OK ? null : playersResponse.Value;
         }

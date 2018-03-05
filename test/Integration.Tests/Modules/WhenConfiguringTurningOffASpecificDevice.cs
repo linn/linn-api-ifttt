@@ -38,7 +38,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
                                   [Guid.NewGuid().ToString()] = "Winter Room"
                               };
 
-            this.LinnApiActions.FindAllDevices(this.AccessToken, Arg.Any<CancellationToken>()).Returns(this.devices);
+            this.LinnApiActions.GetDeviceNames(this.AccessToken, Arg.Any<CancellationToken>()).Returns(this.devices);
 
             this.Client.SetAccessToken(this.AccessToken);
 

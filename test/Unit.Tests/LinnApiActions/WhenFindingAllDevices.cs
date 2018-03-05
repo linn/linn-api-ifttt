@@ -37,7 +37,7 @@
                     Arg.Is<Dictionary<string, string[]>>(d => d["Authorization"][0] == $"Bearer {accessToken}"))
                 .Returns(response);
 
-            this.result = this.Sut.FindAllDevices(accessToken, CancellationToken.None).Result;
+            this.result = this.Sut.GetDeviceNames(accessToken, CancellationToken.None).Result;
         }
 
         [Fact]

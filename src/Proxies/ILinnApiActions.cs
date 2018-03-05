@@ -10,6 +10,6 @@
 
         Task<string> TurnOffDevice(string accessToken, string deviceId, CancellationToken ct);
 
-        Task<IDictionary<string, string>> FindAllDevices(string accessToken, CancellationToken ct);
+        Task<IDictionary<string, string>> GetDeviceNames(string accessToken, CancellationToken ct);
     }
 }
