@@ -18,7 +18,7 @@
         {
             this.AccessToken = Guid.NewGuid().ToString();
 
-            this.IftttServiceKey = Guid.NewGuid().ToString();
+            this.IftttServiceKey = "VALID_SERVICE_KEY";
 
             ConfigurationManager.Configuration["iftttServiceKey"] = this.IftttServiceKey;
 
