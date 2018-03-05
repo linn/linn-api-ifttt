@@ -1,5 +1,6 @@
 ﻿namespace Linn.Api.Ifttt.Service
 {
+    using System;
     using System.Threading.Tasks;
 
     using Botwin;
@@ -30,6 +31,10 @@
             module.Before = ctx =>
                 {
                     ctx.Request.Headers.TryGetValue("IFTTT-Service-Key", out var serviceKey);
+
+                    Console.Out.WriteLine($"Received service key: {serviceKey}");
+
+                    Console.Out.WriteLine($"Expected service key: {ConfigurationManager.Configuration["iftttServiceKey"]}");
 
                     if (serviceKey == ConfigurationManager.Configuration["iftttServiceKey"])
                     {
