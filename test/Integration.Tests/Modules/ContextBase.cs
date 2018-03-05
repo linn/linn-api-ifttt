@@ -19,6 +19,7 @@
             this.AccessToken = Guid.NewGuid().ToString();
 
             this.IftttServiceKey = Guid.NewGuid().ToString();
+
             ConfigurationManager.Configuration["iftttServiceKey"] = this.IftttServiceKey;
 
             this.UserInfoResourceFactory = Substitute.For<IUserResourceFactory>();

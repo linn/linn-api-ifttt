@@ -1,8 +1,7 @@
 ﻿namespace Linn.Api.Ifttt.Service.Modules
 {
-    using System.Threading.Tasks;
-
     using Botwin;
+    using Botwin.Response;
 
     public class ServiceStatusModule : BotwinModule
     {
@@ -10,7 +9,13 @@
         {
             this.RequiresIftttServiceKey();
 
-            this.Get("/ifttt/v1/status", (req, res, routeData) => Task.CompletedTask);
+            this.Get(
+                "/ifttt/v1/status",
+                (req, res, routeData) =>
+                    {
+                        res.StatusCode = 200;
+                        return res.AsJson(new { });
+                    });
         }
     }
 }
