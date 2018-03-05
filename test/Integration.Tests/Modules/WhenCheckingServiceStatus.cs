@@ -13,6 +13,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
         public WhenCheckingServiceStatus()
         {
+            this.Client.DefaultRequestHeaders.Add("IFTTT-Service-Key", new[] { this.IftttServiceKey });
             this.response = this.Client.GetAsync("/ifttt/v1/status").Result;
         }
 

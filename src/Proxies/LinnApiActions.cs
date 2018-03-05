@@ -8,6 +8,7 @@ namespace Linn.Api.Ifttt.Proxies
     using System.Threading.Tasks;
 
     using Linn.Api.Ifttt.Resources.Linn;
+    using Linn.Common.Configuration;
     using Linn.Common.Proxy;
 
     public class LinnApiActions : ILinnApiActions
@@ -16,10 +17,10 @@ namespace Linn.Api.Ifttt.Proxies
 
         private readonly string apiRoot;
 
-        public LinnApiActions(IRestClient restClient, string apiRoot)
+        public LinnApiActions(IRestClient restClient)
         {
             this.restClient = restClient;
-            this.apiRoot = apiRoot;
+            this.apiRoot = ConfigurationManager.Configuration["apiRoot"];
         }
 
         public async Task<string> TurnOffAllDevices(string accessToken, CancellationToken ct)
