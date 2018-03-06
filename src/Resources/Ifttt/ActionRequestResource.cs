@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public class ActionRequestResource
+    public class ActionRequestResource<T> where T : DeviceActionFieldResource
     {
-        public IDictionary<string, string> ActionFields { get; set; }
+        public T ActionFields { get; set; }
 
         public IDictionary<string, string> Ifttt_Source { get; set; }
 

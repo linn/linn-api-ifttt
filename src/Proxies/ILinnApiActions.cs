@@ -11,5 +11,7 @@
         Task<string> TurnOffDevice(string accessToken, string deviceId, CancellationToken ct);
 
         Task<IDictionary<string, string>> GetDeviceNames(string accessToken, CancellationToken ct);
+
+        Task<string> PlaySingleMedia(string accessToken, string deviceId, string mediaUri, string mediaTitle, string mediaArtworkUrl, CancellationToken ct);
     }
 }

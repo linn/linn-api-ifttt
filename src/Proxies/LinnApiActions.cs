@@ -54,6 +54,17 @@ namespace Linn.Api.Ifttt.Proxies
             return players.ToDictionary(p => p.Id, p => p.Name);
         }
 
+        public async Task<string> PlaySingleMedia(string accessToken, string deviceId, string mediaUri, string mediaTitle, string mediaArtworkUrl, CancellationToken ct)
+        {
+            var uri = new Uri($"{this.apiRoot}/players/{deviceId}/play");
+
+            var parameters = new Dictionary<string, string> { { "url", mediaUri }, { "title", mediaTitle }, { "artworkUrl", mediaArtworkUrl } };
+
+            await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
+
+            return DateTime.UtcNow.ToString("o");
+        }
+
         private static Dictionary<string, string[]> Headers(string accessToken)
         {
             var headers = new Dictionary<string, string[]> { ["Authorization"] = new[] { $"Bearer {accessToken}" } };
