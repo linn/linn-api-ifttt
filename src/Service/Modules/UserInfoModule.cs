@@ -1,7 +1,5 @@
 namespace Linn.Api.Ifttt.Service.Modules
 {
-    using System.Threading.Tasks;
-
     using Botwin;
     using Botwin.Response;
 
