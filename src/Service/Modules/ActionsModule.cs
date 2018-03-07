@@ -1,5 +1,6 @@
 ﻿namespace Linn.Api.Ifttt.Service.Modules
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -32,11 +33,22 @@
 
         private async Task TurnOffAllDevices(HttpRequest req, HttpResponse res, RouteData routeData)
         {
-            var actionResponseId = await this.linnApiProxy.TurnOffAllDevices(req.GetAccessToken(), req.HttpContext.RequestAborted);
+            try
+            {
+                var actionResponseId = await this.linnApiProxy.TurnOffAllDevices(
+                                           req.GetAccessToken(),
+                                           req.HttpContext.RequestAborted);
 
-            var resource = new[] { new ActionResponse { Id = actionResponseId } };
+                var resource = new[] { new ActionResponse { Id = actionResponseId } };
 
-            await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
+                await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
+            }
+            catch (Exception e)
+            {
+                res.StatusCode = 401;
+
+                await res.AsJson(new ErrorResource(e.Message), req.HttpContext.RequestAborted);
+            }
         }
 
         private async Task TurnOffDevice(HttpRequest req, HttpResponse res, RouteData routeData)
@@ -45,14 +57,23 @@
 
             if (model.ValidationResult.IsValid)
             {
-                var actionResponseId = await this.linnApiProxy.TurnOffDevice(
-                                           req.GetAccessToken(),
-                                           model.Data.ActionFields.Device_Id,
-                                           req.HttpContext.RequestAborted);
+                try
+                {
+                    var actionResponseId = await this.linnApiProxy.TurnOffDevice(
+                                               req.GetAccessToken(),
+                                               model.Data.ActionFields.Device_Id,
+                                               req.HttpContext.RequestAborted);
 
-                var resource = new[] { new ActionResponse { Id = actionResponseId } };
+                    var resource = new[] { new ActionResponse { Id = actionResponseId } };
 
-                await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
+                    await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
+                }
+                catch (Exception e)
+                {
+                    res.StatusCode = 401;
+
+                    await res.AsJson(new ErrorResource(e.Message), req.HttpContext.RequestAborted);
+                }
             }
             else
             {
@@ -70,17 +91,26 @@
 
             if (model.ValidationResult.IsValid)
             {
-                var actionResponseId = await this.linnApiProxy.PlaySingleMedia(
-                                           req.GetAccessToken(),
-                                           model.Data.ActionFields.Device_Id,
-                                           model.Data.ActionFields.Media_Url,
-                                           model.Data.ActionFields.Media_Title,
-                                           model.Data.ActionFields.Media_Artwork_Url,
-                                           req.HttpContext.RequestAborted);
+                try
+                {
+                    var actionResponseId = await this.linnApiProxy.PlaySingleMedia(
+                                               req.GetAccessToken(),
+                                               model.Data.ActionFields.Device_Id,
+                                               model.Data.ActionFields.Media_Url,
+                                               model.Data.ActionFields.Media_Title,
+                                               model.Data.ActionFields.Media_Artwork_Url,
+                                               req.HttpContext.RequestAborted);
 
-                var resource = new[] { new ActionResponse { Id = actionResponseId } };
+                    var resource = new[] { new ActionResponse { Id = actionResponseId } };
 
-                await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
+                    await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
+                }
+                catch (Exception e)
+                {
+                    res.StatusCode = 401;
+
+                    await res.AsJson(new ErrorResource(e.Message), req.HttpContext.RequestAborted);
+                }
             }
             else
             {
@@ -94,11 +124,25 @@
 
         private async Task ListDevices(HttpRequest req, HttpResponse res, RouteData routeData)
         {
-            var players = await this.linnApiProxy.GetDeviceNames(req.GetAccessToken(), req.HttpContext.RequestAborted);
+            try
+            {
+                var players = await this.linnApiProxy.GetDeviceNames(
+                                  req.GetAccessToken(),
+                                  req.HttpContext.RequestAborted);
 
-            var actionFieldOptions = players.Select(p => new ActionFieldOption { Label = p.Value, Value = p.Key }).ToArray();
+                var actionFieldOptions = players.Select(p => new ActionFieldOption { Label = p.Value, Value = p.Key })
+                    .ToArray();
 
-            await res.AsJson(new DataResource<ActionFieldOption[]>(actionFieldOptions), req.HttpContext.RequestAborted);
+                await res.AsJson(
+                    new DataResource<ActionFieldOption[]>(actionFieldOptions),
+                    req.HttpContext.RequestAborted);
+            }
+            catch (Exception e)
+            {
+                res.StatusCode = 401;
+
+                await res.AsJson(new ErrorResource(e.Message), req.HttpContext.RequestAborted);
+            }
         }
     }
 }

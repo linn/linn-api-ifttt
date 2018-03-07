@@ -11,17 +11,16 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
     using Xunit;
 
-    public class WhenTurningOffASpecificDeviceWithMissingDeviceId : ContextBase
+    public class WhenPlayMediaOnASpecificDeviceWithMissingActionFields : ContextBase
     {
         private readonly HttpResponseMessage response;
 
         private readonly ErrorResource result;
 
-        public WhenTurningOffASpecificDeviceWithMissingDeviceId()
+        public WhenPlayMediaOnASpecificDeviceWithMissingActionFields()
         {
             var request = new
                               {
-                                  actionFields = new { },
                                   ifttt_source = new { id = "2", url = "https://ifttt.com/myrecipes/personal/2" },
                                   user = new { timezone = "Pacific Time (US & Canada)" }
                               };
@@ -30,7 +29,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
             this.Client.SetAccessToken(this.AccessToken);
 
-            this.response = this.Client.PostAsync("/ifttt/v1/actions/turn_off_device", content).Result;
+            this.response = this.Client.PostAsync("/ifttt/v1/actions/play_single_media", content).Result;
 
             this.result = this.response.JsonBody<ErrorResource>();
         }
@@ -45,7 +44,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         public void ShouldDescribeError()
         {
             this.result.Errors.Should().HaveCount(1);
-            this.result.Errors[0].Message.Should().Be("Action field `device_id` missing");
+            this.result.Errors[0].Message.Should().Be("`actionFields` missing");
         }
     }
 }

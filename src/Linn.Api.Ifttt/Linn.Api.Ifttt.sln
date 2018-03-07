@@ -18,9 +18,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2E93F1C9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Integration.Tests", "..\..\test\Integration.Tests\Integration.Tests.csproj", "{D4F787CA-728D-49F4-9375-D4B43AD4DE27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "..\..\test\Unit.Tests\Unit.Tests.csproj", "{4D820DDA-7A56-42C2-8517-4F1DB1F4BC09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit.Tests", "..\..\test\Unit.Tests\Unit.Tests.csproj", "{4D820DDA-7A56-42C2-8517-4F1DB1F4BC09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proxies", "..\Proxies\Proxies.csproj", "{48E82417-0096-4CCA-9E4E-113352064283}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proxies", "..\Proxies\Proxies.csproj", "{48E82417-0096-4CCA-9E4E-113352064283}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

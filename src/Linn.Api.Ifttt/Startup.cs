@@ -8,7 +8,6 @@ namespace Linn.Api.Ifttt
     using Linn.Common.Proxy;
 
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
     public class Startup

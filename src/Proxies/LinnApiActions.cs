@@ -33,7 +33,12 @@ namespace Linn.Api.Ifttt.Proxies
                 .Select(href => new Uri($"{this.apiRoot}{href}"))
                 .Select(uri => this.restClient.Put(ct, uri, null, Headers(accessToken), null));
 
-            await Task.WhenAll(tasks);
+            var statusCodes = await Task.WhenAll(tasks);
+
+            if (statusCodes.Contains(HttpStatusCode.Forbidden))
+            {
+                throw new Exception($"Linn API status codes: [{string.Join(",", statusCodes)}]");
+            }
 
             return DateTime.UtcNow.ToString("o");
         }
@@ -42,7 +47,12 @@ namespace Linn.Api.Ifttt.Proxies
         {
             var uri = new Uri($"{this.apiRoot}/devices/{deviceId}/standby");
 
-            await this.restClient.Put(ct, uri, null, Headers(accessToken), null);
+            var statusCode = await this.restClient.Put(ct, uri, null, Headers(accessToken), null);
+
+            if (statusCode == HttpStatusCode.Forbidden)
+            {
+                throw new Exception($"Linn API status code: {statusCode}");
+            }
 
             return DateTime.UtcNow.ToString("o");
         }
@@ -60,7 +70,12 @@ namespace Linn.Api.Ifttt.Proxies
 
             var parameters = new Dictionary<string, string> { { "url", mediaUri }, { "title", mediaTitle }, { "artworkUrl", mediaArtworkUrl } };
 
-            await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
+            var statusCode = await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
+
+            if (statusCode == HttpStatusCode.Forbidden)
+            {
+                throw new Exception($"Linn API status code: {statusCode}");
+            }
 
             return DateTime.UtcNow.ToString("o");
         }
@@ -75,7 +90,12 @@ namespace Linn.Api.Ifttt.Proxies
         {
             var playersResponse = await this.restClient.Get<PlayerResource[]>(ct, new Uri($"{this.apiRoot}/players/"), null, Headers(accessToken));
 
-            return playersResponse.StatusCode != HttpStatusCode.OK ? null : playersResponse.Value;
+            if (playersResponse.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new Exception($"Linn API status code: {playersResponse.StatusCode}");
+            }
+
+            return playersResponse.Value;
         }
     }
 }

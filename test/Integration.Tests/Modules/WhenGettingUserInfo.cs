@@ -50,11 +50,5 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         {
             this.result.Data.Id.Should().Be(this.userInfoResource.Id);
         }
-
-        [Fact]
-        public void ShouldSetUrl()
-        {
-            this.result.Data.Url.Should().Be(this.userInfoResource.Url);
-        }
     }
 }
