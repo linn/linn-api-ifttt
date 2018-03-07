@@ -30,7 +30,7 @@
             this.Post("/ifttt/v1/test/setup", this.GenerateTestData);
         }
 
-        private static TestSamples GenerateSamples(string deviceId)
+        private static TestSamples GenerateSamples(string deviceId, string playlistId)
         {
             return new TestSamples
                        {
@@ -40,6 +40,7 @@
                                              turn_off_all_devices = TurnOffAllDevicesSampleData(),
                                              turn_off_device = TurnOffDeviceSampleData(deviceId),
                                              play_single_media = PlaySingleMediaSampleData(deviceId),
+                                             play_playlist = PlayPlaylistSampleData(deviceId, playlistId)
                                          }
                        };
         }
@@ -47,6 +48,15 @@
         private static Dictionary<string, string> TurnOffAllDevicesSampleData()
         {
             return new Dictionary<string, string>();
+        }
+
+        private static Dictionary<string, string> PlayPlaylistSampleData(string deviceId, string playlistId)
+        {
+            return new Dictionary<string, string>
+                       {
+                           { "device_id", deviceId },
+                           { "playlist_id", playlistId }
+                       };
         }
 
         private static Dictionary<string, string> PlaySingleMediaSampleData(string deviceId)
@@ -96,10 +106,12 @@
 
             var devices = await this.actions.GetDeviceNames(accessToken, res.HttpContext.RequestAborted);
 
+            var playlists = await this.actions.GetPlaylistNames(accessToken, res.HttpContext.RequestAborted);
+
             var testData = new TestDataResource
                                {
                                    AccessToken = accessToken,
-                                   Samples = GenerateSamples(devices.Keys.First())
+                                   Samples = GenerateSamples(devices.Keys.First(), playlists.Keys.First())
                                };
 
             await res.AsJson(new DataResource<TestDataResource>(testData));
