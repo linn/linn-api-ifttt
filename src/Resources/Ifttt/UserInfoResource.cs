@@ -2,17 +2,14 @@
 {
     public class UserInfoResource
     {
-        public UserInfoResource(string name, string id, string url = null)
+        public UserInfoResource(string name, string id)
         {
             this.Name = name;
             this.Id = id;
-            this.Url = url;
         }
 
         public string Name { get; }
 
         public string Id { get; }
-
-        public string Url { get; }
     }
 }

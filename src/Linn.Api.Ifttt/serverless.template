@@ -15,6 +15,22 @@
     "IftttServiceKey": {
         "Type": "String",
         "Description": "IFTTT Service Key"
+    },
+    "IftttTestClientId": {
+        "Type": "String",
+        "Description": "IFTTT Test Client Id"
+    },
+    "IftttTestClientSecret": {
+        "Type": "String",
+        "Description": "IFTTT Test Client Secret"
+    },
+    "IftttTestUsername": {
+        "Type": "String",
+        "Description": "IFTTT Test Username"
+    },
+    "IftttTestPassword": {
+        "Type": "String",
+        "Description": "IFTTT Test Password"
     }
   },
 
@@ -37,7 +53,11 @@
           "Variables" : {
             "discoveryEndpoint": { "Ref" : "DiscoveryEndpoint" },
             "apiRoot": { "Ref" : "ApiRoot" },
-            "iftttServiceKey": { "Ref" : "IftttServiceKey" }
+            "iftttServiceKey": { "Ref" : "IftttServiceKey" },
+            "testClientId": { "Ref" : "IftttTestClientId" },
+            "testClientSecret": { "Ref" : "IftttTestClientSecret" },
+            "testUsername": { "Ref" : "IftttTestUsername" },
+            "testPassword": { "Ref" : "IftttTestPassword" }
           }
         },
         "Events": {

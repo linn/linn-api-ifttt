@@ -1,5 +1,6 @@
 namespace Linn.Api.Ifttt.Service.Factories
 {
+    using System;
     using System.Linq;
     using System.Net;
     using System.Threading;
@@ -16,8 +17,7 @@ namespace Linn.Api.Ifttt.Service.Factories
 
         public UserResourceFactory()
         {
-            var discoveryClient = new DiscoveryClient(ConfigurationManager.Configuration["discoveryEndpoint"]);
-            this.discoveryResponseTask = discoveryClient.GetAsync();
+            this.discoveryResponseTask = DiscoveryClient.GetAsync(ConfigurationManager.Configuration["discoveryEndpoint"]);
         }
 
         public async Task<UserInfoResource> Create(string accessToken, CancellationToken ct)
@@ -29,7 +29,7 @@ namespace Linn.Api.Ifttt.Service.Factories
 
             if (userInfoResponse.HttpStatusCode != HttpStatusCode.OK)
             {
-                return null;
+                throw new Exception($"Failure to download userinfo (StatusCode: {userInfoResponse.HttpStatusCode})");
             }
 
             var email = userInfoResponse.Claims.First(c => c.Type == "email").Value;

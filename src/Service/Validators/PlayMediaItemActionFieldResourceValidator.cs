@@ -9,8 +9,14 @@
     {
         public PlayMediaItemActionFieldResourceValidator()
         {
-            this.RuleFor(c => c.ActionFields.Device_Id).NotEmpty().WithMessage("Action field `device_id` missing");
-            this.RuleFor(c => c.ActionFields.Media_Url).NotEmpty().WithMessage("Action field `media_url` missing");
+            this.RuleFor(c => c.ActionFields).NotNull().WithMessage("`actionFields` missing").DependentRules(
+                rules =>
+                    {
+                        rules.RuleFor(c => c.ActionFields.Device_Id).NotEmpty()
+                            .WithMessage("Action field `device_id` missing");
+                        rules.RuleFor(c => c.ActionFields.Media_Url).NotEmpty()
+                            .WithMessage("Action field `media_url` missing");
+                    });
         }
     }
 }
