@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading;
 
     using FluentAssertions;
@@ -27,6 +28,13 @@
             this.deviceId = Guid.NewGuid().ToString();
 
             this.playlistId = Guid.NewGuid().ToString();
+
+            this.RestClient.Put(
+                Arg.Any<CancellationToken>(),
+                Arg.Any<Uri>(),
+                Arg.Any<Dictionary<string, string>>(),
+                Arg.Any<Dictionary<string, string[]>>(),
+                Arg.Any<object>()).Returns(HttpStatusCode.OK);
 
             this.result = this.Sut.PlayPlaylist(this.accessToken, this.deviceId, this.playlistId, CancellationToken.None).Result;
         }

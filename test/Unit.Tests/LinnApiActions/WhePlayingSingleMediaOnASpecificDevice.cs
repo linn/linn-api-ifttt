@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading;
 
     using FluentAssertions;
@@ -35,6 +36,13 @@
             this.mediaArtworkUrl = "http://localhost/media/linn.jpg";
 
             this.mediaUrl = "http://localhost/media/linn.flac";
+
+            this.RestClient.Put(
+                Arg.Any<CancellationToken>(),
+                Arg.Any<Uri>(),
+                Arg.Any<Dictionary<string, string>>(),
+                Arg.Any<Dictionary<string, string[]>>(),
+                Arg.Any<object>()).Returns(HttpStatusCode.OK);
 
             this.result = this.Sut.PlaySingleMedia(this.accessToken, this.deviceId, this.mediaUrl, this.mediaTitle, this.mediaArtworkUrl, CancellationToken.None).Result;
         }

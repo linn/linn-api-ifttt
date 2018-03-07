@@ -35,7 +35,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             var statusCodes = await Task.WhenAll(tasks);
 
-            if (statusCodes.Contains(HttpStatusCode.Forbidden))
+            if (statusCodes.Any(c => c != HttpStatusCode.OK))
             {
                 throw new Exception($"Linn API status codes: [{string.Join(",", statusCodes)}]");
             }
@@ -49,7 +49,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             var statusCode = await this.restClient.Put(ct, uri, null, Headers(accessToken), null);
 
-            if (statusCode == HttpStatusCode.Forbidden)
+            if (statusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Linn API status code: {statusCode}");
             }
@@ -72,7 +72,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             var statusCode = await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
 
-            if (statusCode == HttpStatusCode.Forbidden)
+            if (statusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Linn API status code: {statusCode}");
             }
@@ -88,7 +88,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             var statusCode = await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
 
-            if (statusCode == HttpStatusCode.Forbidden)
+            if (statusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Linn API status code: {statusCode}");
             }
@@ -113,7 +113,7 @@ namespace Linn.Api.Ifttt.Proxies
         {
             var playersResponse = await this.restClient.Get<PlayerResource[]>(ct, new Uri($"{this.apiRoot}/players/"), null, Headers(accessToken));
 
-            if (playersResponse.StatusCode == HttpStatusCode.Forbidden)
+            if (playersResponse.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Linn API status code: {playersResponse.StatusCode}");
             }
@@ -127,7 +127,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             var playlistResponse = await this.restClient.Get<PlaylistResource[]>(ct, new Uri($"{this.apiRoot}/playlists/"), queryParameters, Headers(accessToken));
 
-            if (playlistResponse.StatusCode == HttpStatusCode.Forbidden)
+            if (playlistResponse.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Linn API status code: {playlistResponse.StatusCode}");
             }

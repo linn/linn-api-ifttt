@@ -95,7 +95,7 @@
             var response = await client.RequestResourceOwnerPasswordAsync(
                        ConfigurationManager.Configuration["testUsername"],
                        ConfigurationManager.Configuration["testPassword"],
-                       "openid email offline_access device_control volume_control player_information read_playlists");
+                       "openid email offline_access device_control volume_control player_information list_playlists read_playlists");
 
             return response.AccessToken;
         }
