@@ -16,7 +16,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
     using Xunit;
 
-    public class WhenConfiguringTurningOffASpecificDeviceWithInvalidAccessToken : ContextBase
+    public class WhenConfiguringDeviceIdForTurningOffASpecificDeviceWithInvalidAccessToken : ContextBase
     {
         private readonly HttpResponseMessage response;
 
@@ -24,7 +24,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
         private readonly string errorMessage;
 
-        public WhenConfiguringTurningOffASpecificDeviceWithInvalidAccessToken()
+        public WhenConfiguringDeviceIdForTurningOffASpecificDeviceWithInvalidAccessToken()
         {
             this.errorMessage = "Failure";
 

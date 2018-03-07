@@ -17,32 +17,33 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
     using Xunit;
 
-    public class WhenConfiguringTurningOffASpecificDevice : ContextBase
+    public class WhenConfiguringPlaylistIdForPlayPlaylistOnASpecificDevice : ContextBase
     {
         private readonly HttpResponseMessage response;
 
         private readonly DataResource<ActionFieldOption[]> result;
 
-        private readonly Dictionary<string, string> devices;
+        private readonly Dictionary<string, string> playlists;
 
-        public WhenConfiguringTurningOffASpecificDevice()
+        public WhenConfiguringPlaylistIdForPlayPlaylistOnASpecificDevice()
         {
             var request = new { };
 
             var content = new StringContent(JsonConvert.SerializeObject(request));
 
-            this.devices = new Dictionary<string, string>
+            this.playlists = new Dictionary<string, string>
                               {
-                                  [Guid.NewGuid().ToString()] = "Kitchen",
-                                  [Guid.NewGuid().ToString()] = "Summer Room",
-                                  [Guid.NewGuid().ToString()] = "Winter Room"
-                              };
+                                  [Guid.NewGuid().ToString()] = "Kids Bathtime",
+                                  [Guid.NewGuid().ToString()] = "Holiday Drive",
+                                  [Guid.NewGuid().ToString()] = "Poker Night",
+                                  [Guid.NewGuid().ToString()] = "Morning After Blues"
+            };
 
-            this.LinnApiActions.GetDeviceNames(this.AccessToken, Arg.Any<CancellationToken>()).Returns(this.devices);
+            this.LinnApiActions.GetPlaylistNames(this.AccessToken, Arg.Any<CancellationToken>()).Returns(this.playlists);
 
             this.Client.SetAccessToken(this.AccessToken);
 
-            this.response = this.Client.PostAsync("/ifttt/v1/actions/turn_off_device/fields/device_id/options", content).Result;
+            this.response = this.Client.PostAsync("/ifttt/v1/actions/play_playlist/fields/playlist_id/options", content).Result;
 
             this.result = this.response.JsonBody<DataResource<ActionFieldOption[]>>();
         }
@@ -56,8 +57,8 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         [Fact]
         public void ShouldReturnData()
         {
-            this.result.Data.Should().HaveCount(this.devices.Count);
-            foreach (var device in this.devices)
+            this.result.Data.Should().HaveCount(this.playlists.Count);
+            foreach (var device in this.playlists)
             {
                 this.result.Data.First(d => d.Value == device.Key).Label.Should().Be(device.Value);
             }

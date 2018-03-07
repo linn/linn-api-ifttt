@@ -25,9 +25,16 @@
         protected static PlayerResource GeneratePlayerResource()
         {
             var id = Guid.NewGuid().ToString();
-            var playerResource = new PlayerResource { Id = id };
-            playerResource.Links.Add(new LinkResource("standby", $"/{Guid.NewGuid().ToString()}"));
-            return playerResource;
+            var resource = new PlayerResource { Id = id };
+            resource.Links.Add(new LinkResource("standby", $"/{Guid.NewGuid().ToString()}"));
+            return resource;
+        }
+
+        protected static PlaylistResource GeneratePlaylistResource()
+        {
+            var id = Guid.NewGuid().ToString();
+            var resource = new PlaylistResource { Id = id };
+            return resource;
         }
     }
 }

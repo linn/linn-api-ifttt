@@ -17,7 +17,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
     using Xunit;
 
-    public class WhenConfiguringPlayMediaOnASpecificDevice : ContextBase
+    public class WhenConfiguringDeviceIdForPlayPlaylistOnASpecificDevice : ContextBase
     {
         private readonly HttpResponseMessage response;
 
@@ -25,7 +25,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
         private readonly Dictionary<string, string> devices;
 
-        public WhenConfiguringPlayMediaOnASpecificDevice()
+        public WhenConfiguringDeviceIdForPlayPlaylistOnASpecificDevice()
         {
             var request = new { };
 
@@ -42,7 +42,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
             this.Client.SetAccessToken(this.AccessToken);
 
-            this.response = this.Client.PostAsync("/ifttt/v1/actions/play_single_media/fields/device_id/options", content).Result;
+            this.response = this.Client.PostAsync("/ifttt/v1/actions/play_playlist/fields/device_id/options", content).Result;
 
             this.result = this.response.JsonBody<DataResource<ActionFieldOption[]>>();
         }

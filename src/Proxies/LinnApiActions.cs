@@ -80,6 +80,29 @@ namespace Linn.Api.Ifttt.Proxies
             return DateTime.UtcNow.ToString("o");
         }
 
+        public async Task<string> PlayPlaylist(string accessToken, string deviceId, string playlistId, CancellationToken ct)
+        {
+            var uri = new Uri($"{this.apiRoot}/players/{deviceId}/playlist/");
+
+            var parameters = new Dictionary<string, string> { { "playlistId", playlistId } };
+
+            var statusCode = await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
+
+            if (statusCode == HttpStatusCode.Forbidden)
+            {
+                throw new Exception($"Linn API status code: {statusCode}");
+            }
+
+            return DateTime.UtcNow.ToString("o");
+        }
+
+        public async Task<IDictionary<string, string>> GetPlaylistNames(string accessToken, CancellationToken ct)
+        {
+            var playlists = await this.ListAllPlaylists(accessToken, ct);
+
+            return playlists.ToDictionary(p => p.Id, p => p.Name);
+        }
+
         private static Dictionary<string, string[]> Headers(string accessToken)
         {
             var headers = new Dictionary<string, string[]> { ["Authorization"] = new[] { $"Bearer {accessToken}" } };
@@ -96,6 +119,20 @@ namespace Linn.Api.Ifttt.Proxies
             }
 
             return playersResponse.Value;
+        }
+
+        private async Task<PlaylistResource[]> ListAllPlaylists(string accessToken, CancellationToken ct)
+        {
+            var queryParameters = new Dictionary<string, string> { { "sortBy", "name" }, { "includeOnly", "named" } };
+
+            var playlistResponse = await this.restClient.Get<PlaylistResource[]>(ct, new Uri($"{this.apiRoot}/playlists/"), queryParameters, Headers(accessToken));
+
+            if (playlistResponse.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new Exception($"Linn API status code: {playlistResponse.StatusCode}");
+            }
+
+            return playlistResponse.Value;
         }
     }
 }
