@@ -16,7 +16,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
     using Xunit;
 
-    public class WhenConfiguringPlayMediaOnASpecificDeviceWithInvalidAccessToken : ContextBase
+    public class WhenConfiguringDeviceIdForPlayPlaylistOnASpecificDeviceWithInvalidAccessToken : ContextBase
     {
         private readonly HttpResponseMessage response;
 
@@ -24,7 +24,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
         private readonly string errorMessage;
 
-        public WhenConfiguringPlayMediaOnASpecificDeviceWithInvalidAccessToken()
+        public WhenConfiguringDeviceIdForPlayPlaylistOnASpecificDeviceWithInvalidAccessToken()
         {
             this.errorMessage = "Failure";
 
@@ -36,7 +36,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
             this.Client.SetAccessToken(Guid.NewGuid().ToString());
 
-            this.response = this.Client.PostAsync("/ifttt/v1/actions/play_single_media/fields/device_id/options", content).Result;
+            this.response = this.Client.PostAsync("/ifttt/v1/actions/play_playlist/fields/device_id/options", content).Result;
 
             this.result = this.response.JsonBody<ErrorResource>();
         }

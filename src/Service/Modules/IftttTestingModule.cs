@@ -30,8 +30,11 @@
             this.Post("/ifttt/v1/test/setup", this.GenerateTestData);
         }
 
-        private static TestSamples GenerateSamples(string deviceId)
+        private static TestSamples GenerateSamples(IEnumerable<string> deviceIds, IEnumerable<string> playlistIds)
         {
+            var deviceId = deviceIds.FirstOrDefault();
+            var playlistId = playlistIds.FirstOrDefault();
+
             return new TestSamples
                        {
                            Triggers = new TriggerSamples(),
@@ -40,6 +43,7 @@
                                              turn_off_all_devices = TurnOffAllDevicesSampleData(),
                                              turn_off_device = TurnOffDeviceSampleData(deviceId),
                                              play_single_media = PlaySingleMediaSampleData(deviceId),
+                                             play_playlist = PlayPlaylistSampleData(deviceId, playlistId)
                                          }
                        };
         }
@@ -47,6 +51,15 @@
         private static Dictionary<string, string> TurnOffAllDevicesSampleData()
         {
             return new Dictionary<string, string>();
+        }
+
+        private static Dictionary<string, string> PlayPlaylistSampleData(string deviceId, string playlistId)
+        {
+            return new Dictionary<string, string>
+                       {
+                           { "device_id", deviceId },
+                           { "playlist_id", playlistId }
+                       };
         }
 
         private static Dictionary<string, string> PlaySingleMediaSampleData(string deviceId)
@@ -85,7 +98,7 @@
             var response = await client.RequestResourceOwnerPasswordAsync(
                        ConfigurationManager.Configuration["testUsername"],
                        ConfigurationManager.Configuration["testPassword"],
-                       "openid email offline_access device_control volume_control player_information read_playlists");
+                       "openid email offline_access device_control volume_control player_information list_playlists read_playlists");
 
             return response.AccessToken;
         }
@@ -96,10 +109,12 @@
 
             var devices = await this.actions.GetDeviceNames(accessToken, res.HttpContext.RequestAborted);
 
+            var playlists = await this.actions.GetPlaylistNames(accessToken, res.HttpContext.RequestAborted);
+
             var testData = new TestDataResource
                                {
                                    AccessToken = accessToken,
-                                   Samples = GenerateSamples(devices.Keys.First())
+                                   Samples = GenerateSamples(devices.Keys, playlists.Keys)
                                };
 
             await res.AsJson(new DataResource<TestDataResource>(testData));

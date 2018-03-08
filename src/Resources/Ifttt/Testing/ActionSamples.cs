@@ -9,5 +9,7 @@ namespace Linn.Api.Ifttt.Resources.Ifttt.Testing
         public IDictionary<string, string> turn_off_device { get; set; }
 
         public IDictionary<string, string> play_single_media { get; set; }
+
+        public IDictionary<string, string> play_playlist { get; set; }
     }
 }

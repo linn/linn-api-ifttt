@@ -35,7 +35,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             var statusCodes = await Task.WhenAll(tasks);
 
-            if (statusCodes.Contains(HttpStatusCode.Forbidden))
+            if (statusCodes.Any(c => c != HttpStatusCode.OK))
             {
                 throw new Exception($"Linn API status codes: [{string.Join(",", statusCodes)}]");
             }
@@ -49,7 +49,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             var statusCode = await this.restClient.Put(ct, uri, null, Headers(accessToken), null);
 
-            if (statusCode == HttpStatusCode.Forbidden)
+            if (statusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Linn API status code: {statusCode}");
             }
@@ -72,12 +72,35 @@ namespace Linn.Api.Ifttt.Proxies
 
             var statusCode = await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
 
-            if (statusCode == HttpStatusCode.Forbidden)
+            if (statusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Linn API status code: {statusCode}");
             }
 
             return DateTime.UtcNow.ToString("o");
+        }
+
+        public async Task<string> PlayPlaylist(string accessToken, string deviceId, string playlistId, CancellationToken ct)
+        {
+            var uri = new Uri($"{this.apiRoot}/players/{deviceId}/playlist/");
+
+            var parameters = new Dictionary<string, string> { { "playlistId", playlistId } };
+
+            var statusCode = await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
+
+            if (statusCode != HttpStatusCode.OK)
+            {
+                throw new Exception($"Linn API status code: {statusCode}");
+            }
+
+            return DateTime.UtcNow.ToString("o");
+        }
+
+        public async Task<IDictionary<string, string>> GetPlaylistNames(string accessToken, CancellationToken ct)
+        {
+            var playlists = await this.ListAllPlaylists(accessToken, ct);
+
+            return playlists.ToDictionary(p => p.Id, p => p.Name);
         }
 
         private static Dictionary<string, string[]> Headers(string accessToken)
@@ -90,12 +113,26 @@ namespace Linn.Api.Ifttt.Proxies
         {
             var playersResponse = await this.restClient.Get<PlayerResource[]>(ct, new Uri($"{this.apiRoot}/players/"), null, Headers(accessToken));
 
-            if (playersResponse.StatusCode == HttpStatusCode.Forbidden)
+            if (playersResponse.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception($"Linn API status code: {playersResponse.StatusCode}");
             }
 
             return playersResponse.Value;
+        }
+
+        private async Task<PlaylistResource[]> ListAllPlaylists(string accessToken, CancellationToken ct)
+        {
+            var queryParameters = new Dictionary<string, string> { { "sortBy", "name" }, { "includeOnly", "named" } };
+
+            var playlistResponse = await this.restClient.Get<PlaylistResource[]>(ct, new Uri($"{this.apiRoot}/playlists/"), queryParameters, Headers(accessToken));
+
+            if (playlistResponse.StatusCode != HttpStatusCode.OK)
+            {
+                throw new Exception($"Linn API status code: {playlistResponse.StatusCode}");
+            }
+
+            return playlistResponse.Value;
         }
     }
 }

@@ -11,7 +11,7 @@
 
     using Xunit;
 
-    public class WhePlayingSingleMediaOnASpecificDevice : ContextBase
+    public class WhePlayingAPlaylistOnASpecificDevice : ContextBase
     {
         private readonly string result;
 
@@ -19,23 +19,15 @@
 
         private readonly string deviceId;
 
-        private readonly string mediaUrl;
+        private readonly string playlistId;
 
-        private readonly string mediaTitle;
-
-        private readonly string mediaArtworkUrl;
-
-        public WhePlayingSingleMediaOnASpecificDevice()
+        public WhePlayingAPlaylistOnASpecificDevice()
         {
             this.accessToken = Guid.NewGuid().ToString();
 
             this.deviceId = Guid.NewGuid().ToString();
 
-            this.mediaTitle = "MY_TITLE";
-
-            this.mediaArtworkUrl = "http://localhost/media/linn.jpg";
-
-            this.mediaUrl = "http://localhost/media/linn.flac";
+            this.playlistId = Guid.NewGuid().ToString();
 
             this.RestClient.Put(
                 Arg.Any<CancellationToken>(),
@@ -44,7 +36,7 @@
                 Arg.Any<Dictionary<string, string[]>>(),
                 Arg.Any<object>()).Returns(HttpStatusCode.OK);
 
-            this.result = this.Sut.PlaySingleMedia(this.accessToken, this.deviceId, this.mediaUrl, this.mediaTitle, this.mediaArtworkUrl, CancellationToken.None).Result;
+            this.result = this.Sut.PlayPlaylist(this.accessToken, this.deviceId, this.playlistId, CancellationToken.None).Result;
         }
 
         [Fact]
@@ -58,8 +50,8 @@
         {
             this.RestClient.Received().Put(
                 Arg.Any<CancellationToken>(),
-                Arg.Is<Uri>(uri => uri.ToString() == "http://localhost/players/" + this.deviceId + "/play"),
-                Arg.Is<Dictionary<string, string>>(p => p["url"] == this.mediaUrl && p["title"] == this.mediaTitle && p["artworkUrl"] == this.mediaArtworkUrl),
+                Arg.Is<Uri>(uri => uri.ToString() == "http://localhost/players/" + this.deviceId + "/playlist/"),
+                Arg.Is<Dictionary<string, string>>(p => p["playlistId"] == this.playlistId),
                 Arg.Is<Dictionary<string, string[]>>(d => d["Authorization"][0] == $"Bearer {this.accessToken}"),
                 Arg.Any<object>());
         }

@@ -33,6 +33,13 @@
             response.StatusCode.Returns(HttpStatusCode.OK);
             response.Value.Returns(this.players);
 
+            this.RestClient.Put(
+                Arg.Any<CancellationToken>(),
+                Arg.Any<Uri>(),
+                Arg.Any<Dictionary<string, string>>(),
+                Arg.Any<Dictionary<string, string[]>>(),
+                Arg.Any<object>()).Returns(HttpStatusCode.OK);
+
             this.RestClient.Get<PlayerResource[]>(
                     Arg.Any<CancellationToken>(),
                     Arg.Is<Uri>(uri => uri.ToString().EndsWith("http://localhost/players/")),
