@@ -30,8 +30,11 @@
             this.Post("/ifttt/v1/test/setup", this.GenerateTestData);
         }
 
-        private static TestSamples GenerateSamples(string deviceId, string playlistId)
+        private static TestSamples GenerateSamples(IEnumerable<string> deviceIds, IEnumerable<string> playlistIds)
         {
+            var deviceId = deviceIds.FirstOrDefault();
+            var playlistId = playlistIds.FirstOrDefault();
+
             return new TestSamples
                        {
                            Triggers = new TriggerSamples(),
@@ -111,7 +114,7 @@
             var testData = new TestDataResource
                                {
                                    AccessToken = accessToken,
-                                   Samples = GenerateSamples(devices.Keys.First(), playlists.Keys.First())
+                                   Samples = GenerateSamples(devices.Keys, playlists.Keys)
                                };
 
             await res.AsJson(new DataResource<TestDataResource>(testData));
