@@ -7,6 +7,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
     using FluentAssertions;
 
+    using Linn.Api.Ifttt.Proxies;
     using Linn.Api.Ifttt.Resources.Ifttt;
 
     using NSubstitute;
@@ -20,14 +21,10 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
         private readonly ErrorResource result;
 
-        private readonly string errorMessage;
-
         public WhenGettingUserInfoWithInvalidAccessToken()
         {
-            this.errorMessage = "Failure";
-
             this.UserInfoResourceFactory.Create(Arg.Any<string>(), Arg.Any<CancellationToken>())
-                .Throws(new Exception(this.errorMessage));
+                .Throws(new LinnApiException(HttpStatusCode.Forbidden));
 
             this.Client.SetAccessToken(Guid.NewGuid().ToString());
 
@@ -46,7 +43,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         public void ShouldReturnBody()
         {
             this.result.Errors.Should().HaveCount(1);
-            this.result.Errors[0].Message.Should().Be(this.errorMessage);
+            this.result.Errors[0].Message.Should().Be("Linn API status code: Forbidden");
         }
     }
 }
