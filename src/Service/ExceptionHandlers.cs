@@ -21,6 +21,9 @@
                     var ex = context.Features.Get<IExceptionHandlerFeature>();
                     switch (ex.Error)
                     {
+                        case InvalidServiceKeyException _:
+                            context.Response.StatusCode = 401;
+                            break;
                         case LinnApiException _:
                             var linnApiException = (LinnApiException)ex.Error;
 

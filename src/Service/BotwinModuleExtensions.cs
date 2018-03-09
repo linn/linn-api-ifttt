@@ -1,9 +1,11 @@
 ﻿namespace Linn.Api.Ifttt.Service
 {
+    using System.Net;
     using System.Threading.Tasks;
 
     using Botwin;
 
+    using Linn.Api.Ifttt.Proxies;
     using Linn.Common.Configuration;
 
     public static class BotwinModuleExtensions
@@ -12,16 +14,12 @@
         {
             module.Before += ctx =>
                 {
-                    var accessToken = ctx.Request.GetAccessToken();
-
-                    if (accessToken != null)
+                    if (ctx.Request.GetAccessToken() != null)
                     {
                         return Task.FromResult(true);
                     }
 
-                    ctx.Response.StatusCode = 401;
-
-                    return Task.FromResult(false);
+                    throw new LinnApiException(HttpStatusCode.Unauthorized);
                 };
         }
 
@@ -29,17 +27,12 @@
         {
             module.Before = ctx =>
                 {
-                    if (ctx.Request.Headers.TryGetValue("IFTTT-Service-Key", out var serviceKey))
+                    if (ctx.Request.Headers.TryGetValue("IFTTT-Service-Key", out var serviceKey) && serviceKey == ConfigurationManager.Configuration["iftttServiceKey"])
                     {
-                        if (serviceKey == ConfigurationManager.Configuration["iftttServiceKey"])
-                        {
-                            return Task.FromResult(true);
-                        }
+                        return Task.FromResult(true);
                     }
 
-                    ctx.Response.StatusCode = 401;
-
-                    return Task.FromResult(false);
+                    throw new InvalidServiceKeyException();
                 };
         }
     }
