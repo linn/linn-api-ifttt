@@ -42,25 +42,29 @@
                                new ActionSamples
                                    {
                                        turn_off_all_devices = TurnOffAllDevicesSampleData(),
-                                       turn_off_device = TurnOffDeviceSampleData(deviceId),
+                                       turn_off_device = DeviceSampleData(deviceId),
                                        play_single_media =
                                            PlaySingleMediaSampleData(deviceId),
                                        play_playlist = PlayPlaylistSampleData(
                                            deviceId,
-                                           playlistId)
-                                   },
+                                           playlistId),
+                                       mute_device = DeviceSampleData(deviceId),
+                                       unmute_device = DeviceSampleData(deviceId)
+                               },
                            ActionRecordSkipping = new ActionSamples
                                                       {
                                                           turn_off_device =
-                                                              TurnOffDeviceSampleData(
-                                                                  "UNKONWN_DEVICE"),
+                                                              DeviceSampleData(
+                                                                  "UNKNOWN_DEVICE"),
                                                           play_single_media =
                                                               PlaySingleMediaSampleData(
-                                                                  "UNKONWN_DEVICE"),
+                                                                  "UNKNOWN_DEVICE"),
                                                           play_playlist =
                                                               PlayPlaylistSampleData(
                                                                   "UNKNOWN_DEVICE",
-                                                                  "UNKNOWN_PLAYLIST")
+                                                                  "UNKNOWN_PLAYLIST"),
+                                                          mute_device = DeviceSampleData("UNKNOWN_DEVICE"),
+                                                          unmute_device = DeviceSampleData("UNKNOWN_DEVICE")
                                                       }
                        };
         }
@@ -90,7 +94,7 @@
                        };
         }
 
-        private static Dictionary<string, string> TurnOffDeviceSampleData(string deviceId)
+        private static Dictionary<string, string> DeviceSampleData(string deviceId)
         {
             return new Dictionary<string, string>
                        {
