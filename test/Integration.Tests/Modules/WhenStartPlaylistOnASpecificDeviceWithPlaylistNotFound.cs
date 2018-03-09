@@ -17,13 +17,13 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
     using Xunit;
 
-    public class WhenStartPlaylistOnASpecificDeviceWithInvalidAccessToken : ContextBase
+    public class WhenStartPlaylistOnASpecificDeviceWithPlaylistNotFound : ContextBase
     {
         private readonly HttpResponseMessage response;
 
         private readonly ErrorResource result;
 
-        public WhenStartPlaylistOnASpecificDeviceWithInvalidAccessToken()
+        public WhenStartPlaylistOnASpecificDeviceWithPlaylistNotFound()
         {
             var deviceId = Guid.NewGuid().ToString();
 
@@ -39,7 +39,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
             var content = new StringContent(JsonConvert.SerializeObject(request));
 
             this.LinnApiActions.PlayPlaylist(Arg.Any<string>(), deviceId, playlistId, Arg.Any<CancellationToken>())
-                .Throws(new LinnApiException(HttpStatusCode.Forbidden));
+                .Throws(new LinnApiException(HttpStatusCode.NotFound));
 
             this.Client.SetAccessToken(Guid.NewGuid().ToString());
 
@@ -49,16 +49,17 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         }
 
         [Fact]
-        public void ShouldReturnForbidden()
+        public void ShouldReturnBadRequest()
         {
-            this.response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            this.response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
-        public void ShouldReturnBody()
+        public void ShouldReturnSkipMessage()
         {
             this.result.Errors.Should().HaveCount(1);
-            this.result.Errors[0].Message.Should().Be("Linn API status code: Forbidden");
+            this.result.Errors[0].Status.Should().Be("SKIP");
+            this.result.Errors[0].Message.Should().Be("Linn API status code: NotFound");
         }
     }
 }

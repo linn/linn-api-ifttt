@@ -28,7 +28,7 @@ namespace Linn.Api.Ifttt.Service.Modules
                         {
                             res.StatusCode = 401;
 
-                            await res.AsJson(new ErrorResource(e.Message), req.HttpContext.RequestAborted);
+                            await res.AsJson(new ErrorResource(e.Message, false), req.HttpContext.RequestAborted);
                         }
                     });
         }

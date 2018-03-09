@@ -37,7 +37,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             if (statusCodes.Any(c => c != HttpStatusCode.OK))
             {
-                throw new Exception($"Linn API status codes: [{string.Join(",", statusCodes)}]");
+                throw new LinnApiException(statusCodes.First(c => c != HttpStatusCode.OK));
             }
 
             return DateTime.UtcNow.ToString("o");
@@ -51,7 +51,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             if (statusCode != HttpStatusCode.OK)
             {
-                throw new Exception($"Linn API status code: {statusCode}");
+                throw new LinnApiException(statusCode);
             }
 
             return DateTime.UtcNow.ToString("o");
@@ -74,7 +74,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             if (statusCode != HttpStatusCode.OK)
             {
-                throw new Exception($"Linn API status code: {statusCode}");
+                throw new LinnApiException(statusCode);
             }
 
             return DateTime.UtcNow.ToString("o");
@@ -90,7 +90,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             if (statusCode != HttpStatusCode.OK)
             {
-                throw new Exception($"Linn API status code: {statusCode}");
+                throw new LinnApiException(statusCode);
             }
 
             return DateTime.UtcNow.ToString("o");
@@ -115,7 +115,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             if (playersResponse.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception($"Linn API status code: {playersResponse.StatusCode}");
+                throw new LinnApiException(playersResponse.StatusCode);
             }
 
             return playersResponse.Value;
@@ -129,7 +129,7 @@ namespace Linn.Api.Ifttt.Proxies
 
             if (playlistResponse.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception($"Linn API status code: {playlistResponse.StatusCode}");
+                throw new LinnApiException(playlistResponse.StatusCode);
             }
 
             return playlistResponse.Value;

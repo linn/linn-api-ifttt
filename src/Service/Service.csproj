@@ -10,6 +10,7 @@
     <PackageReference Include="Linn.Common.Configuration" Version="1.1.2" />
     <PackageReference Include="Botwin" Version="3.0.0" />
     <PackageReference Include="IdentityModel" Version="3.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="1.1.0" />
   </ItemGroup>
     
   <ItemGroup>

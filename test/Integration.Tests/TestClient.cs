@@ -6,7 +6,10 @@
 
     using Botwin;
 
+    using Linn.Api.Ifttt.Service;
+
     using Microsoft.AspNetCore;
+    using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +34,11 @@
                                 addDependencies(services);
                                 services.AddBotwin(this.assembly);
                             })
-                    .Configure(app => app.UseBotwin()));
+                    .Configure(app =>
+                        {
+                            app.UseExceptionHandler(ExceptionHandlers.Handlers);
+                            app.UseBotwin();
+                        }));
 
             var client = server.CreateClient();
 
