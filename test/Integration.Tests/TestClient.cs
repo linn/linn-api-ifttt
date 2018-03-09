@@ -2,11 +2,11 @@
 {
     using System;
     using System.Net.Http;
-    using System.Reflection;
 
     using Botwin;
 
     using Linn.Api.Ifttt.Service;
+    using Linn.Api.Ifttt.Service.Modules;
 
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Builder;
@@ -16,14 +16,6 @@
 
     public class TestClient
     {
-        private Assembly assembly;
-
-        public TestClient WithAssembly(Assembly serviceAssembly)
-        {
-            this.assembly = serviceAssembly;
-            return this;
-        }
-
         public HttpClient With(Action<IServiceCollection> addDependencies)
         {
             var server = new TestServer(
@@ -32,7 +24,7 @@
                         services =>
                             {
                                 addDependencies(services);
-                                services.AddBotwin(this.assembly);
+                                services.AddBotwin(typeof(UserInfoModule).Assembly);
                             })
                     .Configure(app =>
                         {

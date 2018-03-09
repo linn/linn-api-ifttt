@@ -5,7 +5,6 @@
 
     using Linn.Api.Ifttt.Proxies;
     using Linn.Api.Ifttt.Service.Factories;
-    using Linn.Api.Ifttt.Service.Modules;
     using Linn.Common.Configuration;
 
     using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +26,6 @@
             this.LinnApiActions = Substitute.For<ILinnApiActions>();
 
             this.Client = new TestClient()
-                .WithAssembly(typeof(UserInfoModule).Assembly)
                 .With(s =>
                     {
                         s.AddSingleton(this.UserInfoResourceFactory);
