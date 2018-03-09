@@ -1,6 +1,5 @@
 namespace Linn.Api.Ifttt.Service.Factories
 {
-    using System;
     using System.Linq;
     using System.Net;
     using System.Threading;
@@ -8,6 +7,7 @@ namespace Linn.Api.Ifttt.Service.Factories
 
     using IdentityModel.Client;
 
+    using Linn.Api.Ifttt.Proxies;
     using Linn.Api.Ifttt.Resources.Ifttt;
     using Linn.Common.Configuration;
 
@@ -29,7 +29,7 @@ namespace Linn.Api.Ifttt.Service.Factories
 
             if (userInfoResponse.HttpStatusCode != HttpStatusCode.OK)
             {
-                throw new Exception($"Failure to download userinfo (StatusCode: {userInfoResponse.HttpStatusCode})");
+                throw new LinnApiException(userInfoResponse.HttpStatusCode);
             }
 
             var email = userInfoResponse.Claims.First(c => c.Type == "email").Value;

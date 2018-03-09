@@ -19,7 +19,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         {
             this.response = this.Client.GetAsync("/ifttt/v1/user/info").Result;
 
-            this.result = this.response.JsonBody<dynamic>();
+            this.result = this.response.JsonBody<ErrorResource>();
         }
 
         [Fact]
@@ -29,9 +29,10 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         }
 
         [Fact]
-        public void ShouldReturnNoBody()
+        public void ShouldReturnBody()
         {
-            this.result.Should().BeNull();
+            this.result.Errors.Should().HaveCount(1);
+            this.result.Errors[0].Message.Should().Be("Linn API status code: Unauthorized");
         }
     }
 }
