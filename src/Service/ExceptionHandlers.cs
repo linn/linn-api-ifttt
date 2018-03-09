@@ -36,7 +36,7 @@
                                     await context.Response.AsJson(new ErrorResource(linnApiException.Message, true), context.RequestAborted);
                                     break;
                                 default:
-                                    context.Response.StatusCode = 400;
+                                    context.Response.StatusCode = (int)linnApiException.StatusCode;
                                     await context.Response.AsJson(new ErrorResource(linnApiException.Message, false), context.RequestAborted);
                                     break;
                             }
