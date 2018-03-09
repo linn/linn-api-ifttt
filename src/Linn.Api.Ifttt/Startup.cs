@@ -17,9 +17,9 @@ namespace Linn.Api.Ifttt
         {
             services.AddBotwin(typeof(UserInfoModule).Assembly);
 
-            services.AddSingleton<IRestClient>(i => new RestClient(10000));
-            services.AddSingleton(typeof(IUserResourceFactory), typeof(UserResourceFactory));
-            services.AddSingleton(typeof(ILinnApiActions), typeof(LinnApiActions));
+            services.AddSingleton<IRestClient, RestClient>();
+            services.AddSingleton<IUserResourceFactory, UserResourceFactory>();
+            services.AddSingleton<ILinnApiActions, LinnApiActions>();
         }
 
         public void Configure(IApplicationBuilder app)

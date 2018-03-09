@@ -16,6 +16,11 @@
 
         Task<string> PlayPlaylist(string accessToken, string deviceId, string playlistId, CancellationToken ct);
 
+        Task<string> MuteDevice(string accessToken, string deviceId, CancellationToken ct);
+
+        Task<string> UnmuteDevice(string accessToken, string deviceId, CancellationToken ct);
+
         Task<IDictionary<string, string>> GetPlaylistNames(string accessToken, CancellationToken ct);
+
     }
 }

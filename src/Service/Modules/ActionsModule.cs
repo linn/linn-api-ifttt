@@ -33,6 +33,48 @@
             this.Post("/ifttt/v1/actions/play_playlist", this.PlayPlaylist);
             this.Post("/ifttt/v1/actions/play_playlist/fields/device_id/options", this.ListDevices);
             this.Post("/ifttt/v1/actions/play_playlist/fields/playlist_id/options", this.ListPlaylists);
+            this.Post("/ifttt/v1/actions/mute_device", this.MuteDevice);
+            this.Post("/ifttt/v1/actions/mute_device/fields/device_id/options", this.ListDevices);
+            this.Post("/ifttt/v1/actions/unmute_device", this.UnmuteDevice);
+            this.Post("/ifttt/v1/actions/unmute_device/fields/device_id/options", this.ListDevices);
+        }
+
+        private async Task UnmuteDevice(HttpRequest req, HttpResponse res, RouteData routeData)
+        {
+            var model = req.BindAndValidate<ActionRequestResource<DeviceActionFieldResource>>();
+
+            if (!model.ValidationResult.IsValid)
+            {
+                throw new ValidationException(model.ValidationResult.Errors);
+            }
+
+            var actionResponseId = await this.linnApiProxy.UnmuteDevice(
+                                       req.GetAccessToken(),
+                                       model.Data.ActionFields.Device_Id,
+                                       req.HttpContext.RequestAborted);
+
+            var resource = new[] { new ActionResponse { Id = actionResponseId } };
+
+            await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
+        }
+
+        private async Task MuteDevice(HttpRequest req, HttpResponse res, RouteData routeData)
+        {
+            var model = req.BindAndValidate<ActionRequestResource<DeviceActionFieldResource>>();
+
+            if (!model.ValidationResult.IsValid)
+            {
+                throw new ValidationException(model.ValidationResult.Errors);
+            }
+
+            var actionResponseId = await this.linnApiProxy.MuteDevice(
+                                       req.GetAccessToken(),
+                                       model.Data.ActionFields.Device_Id,
+                                       req.HttpContext.RequestAborted);
+
+            var resource = new[] { new ActionResponse { Id = actionResponseId } };
+
+            await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
         }
 
         private async Task TurnOffAllDevices(HttpRequest req, HttpResponse res, RouteData routeData)

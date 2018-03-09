@@ -11,5 +11,9 @@ namespace Linn.Api.Ifttt.Resources.Ifttt.Testing
         public IDictionary<string, string> play_single_media { get; set; }
 
         public IDictionary<string, string> play_playlist { get; set; }
+
+        public Dictionary<string, string> mute_device { get; set; }
+
+        public Dictionary<string, string> unmute_device { get; set; }
     }
 }
