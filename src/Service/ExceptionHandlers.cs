@@ -45,8 +45,7 @@
                         case FluentValidation.ValidationException _:
                             var validationException = (FluentValidation.ValidationException)ex.Error;
 
-                            var errorMessages = validationException.Errors
-                                .Select(m => new ErrorMessage(m.ErrorMessage, string.Empty)).ToArray();
+                            var errorMessages = validationException.Errors.Select(m => new ErrorMessage(m.ErrorMessage, string.Empty)).ToArray();
 
                             context.Response.StatusCode = 400;
                             await context.Response.AsJson(new ErrorResource { Errors = errorMessages });
