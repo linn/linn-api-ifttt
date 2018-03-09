@@ -38,13 +38,30 @@
             return new TestSamples
                        {
                            Triggers = new TriggerSamples(),
-                           Actions = new ActionSamples
-                                         {
-                                             turn_off_all_devices = TurnOffAllDevicesSampleData(),
-                                             turn_off_device = TurnOffDeviceSampleData(deviceId),
-                                             play_single_media = PlaySingleMediaSampleData(deviceId),
-                                             play_playlist = PlayPlaylistSampleData(deviceId, playlistId)
-                                         }
+                           Actions =
+                               new ActionSamples
+                                   {
+                                       turn_off_all_devices = TurnOffAllDevicesSampleData(),
+                                       turn_off_device = TurnOffDeviceSampleData(deviceId),
+                                       play_single_media =
+                                           PlaySingleMediaSampleData(deviceId),
+                                       play_playlist = PlayPlaylistSampleData(
+                                           deviceId,
+                                           playlistId)
+                                   },
+                           ActionRecordSkipping = new ActionSamples
+                                                      {
+                                                          turn_off_device =
+                                                              TurnOffDeviceSampleData(
+                                                                  "UNKONWN_DEVICE"),
+                                                          play_single_media =
+                                                              PlaySingleMediaSampleData(
+                                                                  "UNKONWN_DEVICE"),
+                                                          play_playlist =
+                                                              PlayPlaylistSampleData(
+                                                                  "UNKNOWN_DEVICE",
+                                                                  "UNKNOWN_PLAYLIST")
+                                                      }
                        };
         }
 

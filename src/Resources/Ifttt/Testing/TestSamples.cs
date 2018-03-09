@@ -5,5 +5,7 @@ namespace Linn.Api.Ifttt.Resources.Ifttt.Testing
         public TriggerSamples Triggers { get; set; }
 
         public ActionSamples Actions { get; set; }
+
+        public ActionSamples ActionRecordSkipping { get; set; }
     }
 }
