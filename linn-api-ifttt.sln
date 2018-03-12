@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resources", "Resources\Resources.csproj", "{C37B0C77-9062-47B5-96E5-57751D8C4D86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resources", "src\Resources\Resources.csproj", "{C37B0C77-9062-47B5-96E5-57751D8C4D86}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{B6DF96AC-2E04-4FF8-9525-EC59E5B0BAC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "src\Service\Service.csproj", "{B6DF96AC-2E04-4FF8-9525-EC59E5B0BAC2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proxies", "Proxies\Proxies.csproj", "{DDA634A0-BAC8-46BE-AC53-438560521081}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proxies", "src\Proxies\Proxies.csproj", "{DDA634A0-BAC8-46BE-AC53-438560521081}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Linn.Api.Ifttt", "Linn.Api.Ifttt\Linn.Api.Ifttt.csproj", "{F42E043C-0CAD-4582-BE46-4DC669A9749D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Linn.Api.Ifttt", "src\Linn.Api.Ifttt\Linn.Api.Ifttt.csproj", "{F42E043C-0CAD-4582-BE46-4DC669A9749D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7D3E3848-21DD-444B-9290-B28BBE0E8CAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit.Tests", "..\test\Unit.Tests\Unit.Tests.csproj", "{66725A81-85D6-4E93-9CD1-9696B538F312}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit.Tests", "test\Unit.Tests\Unit.Tests.csproj", "{66725A81-85D6-4E93-9CD1-9696B538F312}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Integration.Tests", "..\test\Integration.Tests\Integration.Tests.csproj", "{8DBDA8C3-4587-48BB-9947-00E2FE535303}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Integration.Tests", "test\Integration.Tests\Integration.Tests.csproj", "{8DBDA8C3-4587-48BB-9947-00E2FE535303}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
