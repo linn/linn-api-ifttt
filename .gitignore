@@ -35,4 +35,4 @@ launchSettings.json
 *.jsx.map
 __pycache__
 api/index.html
-src/Linn.Api.Ifttt/aws-lambda-tools-defaults.json
+aws-lambda-tools-defaults.json

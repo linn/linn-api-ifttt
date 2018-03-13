@@ -4,6 +4,7 @@
       <TargetFramework>netcoreapp2.0</TargetFramework>
       <AssemblyName>Linn.Api.Ifttt.Resources</AssemblyName>
       <RootNamespace>Linn.Api.Ifttt.Resources</RootNamespace>
+      <DebugType Condition=" '$(Configuration)' == 'Release' ">None</DebugType>
   </PropertyGroup>
 
 </Project>
