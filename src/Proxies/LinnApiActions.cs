@@ -7,6 +7,7 @@ namespace Linn.Api.Ifttt.Proxies
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Linn.Api.Ifttt.Proxies.Models;
     using Linn.Api.Ifttt.Resources.Linn;
     using Linn.Common.Configuration;
     using Linn.Common.Proxy;
@@ -68,9 +69,9 @@ namespace Linn.Api.Ifttt.Proxies
         {
             var uri = new Uri($"{this.apiRoot}/players/{deviceId}/play");
 
-            var parameters = new Dictionary<string, string> { { "url", mediaUri }, { "title", mediaTitle }, { "artworkUrl", mediaArtworkUrl } };
+            var payload = new PlayableItemModel { Uri = mediaUri, Title = mediaTitle, Artwork = mediaArtworkUrl };
 
-            var statusCode = await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
+            var statusCode = await this.restClient.Put(ct, uri, null, Headers(accessToken), payload);
 
             if (statusCode != HttpStatusCode.OK)
             {
