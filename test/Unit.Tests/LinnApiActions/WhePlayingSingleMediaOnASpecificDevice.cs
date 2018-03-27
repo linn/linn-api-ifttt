@@ -7,6 +7,8 @@
 
     using FluentAssertions;
 
+    using Linn.Api.Ifttt.Proxies.Models;
+
     using NSubstitute;
 
     using Xunit;
@@ -25,6 +27,8 @@
 
         private readonly string mediaArtworkUrl;
 
+        private PlayableItemModel payload;
+
         public WhePlayingSingleMediaOnASpecificDevice()
         {
             this.accessToken = Guid.NewGuid().ToString();
@@ -42,7 +46,7 @@
                 Arg.Any<Uri>(),
                 Arg.Any<Dictionary<string, string>>(),
                 Arg.Any<Dictionary<string, string[]>>(),
-                Arg.Any<object>()).Returns(HttpStatusCode.OK);
+                Arg.Do<PlayableItemModel>(d => this.payload = d)).Returns(HttpStatusCode.OK);
 
             this.result = this.Sut.PlaySingleMedia(this.accessToken, this.deviceId, this.mediaUrl, this.mediaTitle, this.mediaArtworkUrl, CancellationToken.None).Result;
         }
@@ -54,14 +58,17 @@
         }
 
         [Fact]
-        public void ShouldPlayOnTheDevice()
+        public void ShouldSendAPlay()
         {
             this.RestClient.Received().Put(
                 Arg.Any<CancellationToken>(),
                 Arg.Is<Uri>(uri => uri.ToString() == "http://localhost/players/" + this.deviceId + "/play"),
-                Arg.Is<Dictionary<string, string>>(p => p["url"] == this.mediaUrl && p["title"] == this.mediaTitle && p["artworkUrl"] == this.mediaArtworkUrl),
+                Arg.Any<Dictionary<string, string>>(),
                 Arg.Is<Dictionary<string, string[]>>(d => d["Authorization"][0] == $"Bearer {this.accessToken}"),
-                Arg.Any<object>());
+                Arg.Any<PlayableItemModel>());
+            this.payload.Uri.Should().Be(this.mediaUrl);
+            this.payload.Title.Should().Be(this.mediaTitle);
+            this.payload.Artwork.Should().Be(this.mediaArtworkUrl);
         }
     }
 }
