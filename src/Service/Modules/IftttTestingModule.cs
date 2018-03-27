@@ -61,7 +61,7 @@
                                                                   "UNKNOWN_DEVICE"),
                                                           play_playlist =
                                                               PlayPlaylistSampleData(
-                                                                  "UNKNOWN_DEVICE",
+                                                                  deviceId,
                                                                   "UNKNOWN_PLAYLIST"),
                                                           mute_device = DeviceSampleData("UNKNOWN_DEVICE"),
                                                           unmute_device = DeviceSampleData("UNKNOWN_DEVICE")
