@@ -53,7 +53,7 @@
         [Fact]
         public void ShouldReturnATimestamp()
         {
-            DateTime.Parse(this.result).Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+            DateTime.Parse(this.result).ToUniversalTime().Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
         }
 
         [Fact]
