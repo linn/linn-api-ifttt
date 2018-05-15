@@ -23,6 +23,12 @@ namespace Linn.Api.Ifttt.Service.Factories
         public async Task<UserInfoResource> Create(string accessToken, CancellationToken ct)
         {
             var doc = await this.discoveryResponseTask;
+
+            if (doc.StatusCode != HttpStatusCode.OK)
+            {
+                throw new LinnApiException(doc.StatusCode);
+            }
+
             var userInfoClient = new UserInfoClient(doc.UserInfoEndpoint);
 
             var userInfoResponse = await userInfoClient.GetAsync(accessToken, ct);
