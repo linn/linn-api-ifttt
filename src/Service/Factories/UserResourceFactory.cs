@@ -13,21 +13,16 @@ namespace Linn.Api.Ifttt.Service.Factories
 
     public class UserResourceFactory : IUserResourceFactory
     {
-        private readonly Task<DiscoveryResponse> discoveryResponseTask;
+        private readonly LazyAsync<DiscoveryResponse> discoDoc;
 
         public UserResourceFactory()
         {
-            this.discoveryResponseTask = DiscoveryClient.GetAsync(ConfigurationManager.Configuration["discoveryEndpoint"]);
+            this.discoDoc = new LazyAsync<DiscoveryResponse>(FetchDiscoveryDoc);
         }
 
         public async Task<UserInfoResource> Create(string accessToken, CancellationToken ct)
         {
-            var doc = await this.discoveryResponseTask;
-
-            if (doc.StatusCode != HttpStatusCode.OK)
-            {
-                throw new LinnApiException(doc.StatusCode);
-            }
+            var doc = await this.discoDoc.GetValue();
 
             var userInfoClient = new UserInfoClient(doc.UserInfoEndpoint);
 
@@ -42,6 +37,18 @@ namespace Linn.Api.Ifttt.Service.Factories
             var accountId = userInfoResponse.Claims.First(c => c.Type == "sub").Value;
 
             return new UserInfoResource(email, accountId);
+        }
+
+        private static async Task<DiscoveryResponse> FetchDiscoveryDoc()
+        {
+            var doc = await DiscoveryClient.GetAsync(ConfigurationManager.Configuration["discoveryEndpoint"]);
+
+            if (!doc.IsError)
+            {
+                return doc;
+            }
+
+            throw doc.Exception;
         }
     }
 }
