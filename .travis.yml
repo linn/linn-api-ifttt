@@ -1,6 +1,5 @@
-language: csharp
-dotnet: 2.0.3
-mono: none
+sudo: required
+services:
+- docker
 script:
-  - dotnet test test/Integration.Tests/
-  - dotnet test test/Unit.Tests/
+- docker build -t deploy .

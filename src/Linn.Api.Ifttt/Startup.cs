@@ -1,11 +1,10 @@
 namespace Linn.Api.Ifttt
 {
-    using Botwin;
+    using Carter;
 
     using Linn.Api.Ifttt.Proxies;
     using Linn.Api.Ifttt.Service;
     using Linn.Api.Ifttt.Service.Factories;
-    using Linn.Api.Ifttt.Service.Modules;
     using Linn.Common.Proxy;
 
     using Microsoft.AspNetCore.Builder;
@@ -15,7 +14,7 @@ namespace Linn.Api.Ifttt
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddBotwin(typeof(UserInfoModule).Assembly);
+            services.AddCarter();
 
             services.AddSingleton<IRestClient, RestClient>();
             services.AddSingleton<IUserResourceFactory, UserResourceFactory>();
@@ -25,7 +24,7 @@ namespace Linn.Api.Ifttt
         public void Configure(IApplicationBuilder app)
         {
             app.UseExceptionHandler(ExceptionHandlers.Handlers);
-            app.UseBotwin();
+            app.UseCarter();
         }
     }
 }

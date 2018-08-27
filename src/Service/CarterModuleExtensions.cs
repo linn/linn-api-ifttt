@@ -3,14 +3,14 @@
     using System.Net;
     using System.Threading.Tasks;
 
-    using Botwin;
+    using Carter;
 
     using Linn.Api.Ifttt.Proxies;
     using Linn.Common.Configuration;
 
-    public static class BotwinModuleExtensions
+    public static class CarterModuleExtensions
     {
-        public static void RequiresAccessToken(this BotwinModule module)
+        public static void RequiresAccessToken(this CarterModule module)
         {
             module.Before += ctx =>
                 {
@@ -23,7 +23,7 @@
                 };
         }
 
-        public static void RequiresIftttServiceKey(this BotwinModule module)
+        public static void RequiresIftttServiceKey(this CarterModule module)
         {
             module.Before = ctx =>
                 {

@@ -3,9 +3,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Botwin;
-    using Botwin.ModelBinding;
-    using Botwin.Response;
+    using Carter;
+    using Carter.ModelBinding;
+    using Carter.Response;
 
     using FluentValidation;
 
@@ -15,7 +15,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
 
-    public class ActionsModule : BotwinModule
+    public class ActionsModule : CarterModule
     {
         private readonly ILinnApiActions linnApiProxy;
 

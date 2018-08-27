@@ -5,8 +5,8 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Botwin;
-    using Botwin.Response;
+    using Carter;
+    using Carter.Response;
 
     using IdentityModel.Client;
 
@@ -18,7 +18,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
 
-    public class IftttTestingModule : BotwinModule
+    public class IftttTestingModule : CarterModule
     {
         private readonly ILinnApiActions actions;
 

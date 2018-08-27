@@ -2,9 +2,9 @@
 {
     using System.Threading.Tasks;
 
-    using Botwin;
+    using Carter;
 
-    public class ServiceStatusModule : BotwinModule
+    public class ServiceStatusModule : CarterModule
     {
         public ServiceStatusModule()
         {
