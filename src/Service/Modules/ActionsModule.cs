@@ -37,6 +37,8 @@
             this.Post("/ifttt/v1/actions/mute_device/fields/device_id/options", this.ListDevices);
             this.Post("/ifttt/v1/actions/unmute_device", this.UnmuteDevice);
             this.Post("/ifttt/v1/actions/unmute_device/fields/device_id/options", this.ListDevices);
+            this.Post("/ifttt/v1/actions/invoke_pin", this.InvokePin);
+            this.Post("/ifttt/v1/actions/invoke_pin/fields/device_id/options", this.ListDevices);
         }
 
         private async Task UnmuteDevice(HttpRequest req, HttpResponse res, RouteData routeData)
@@ -101,6 +103,26 @@
                                         req.GetAccessToken(),
                                         model.Data.ActionFields.Device_Id,
                                         req.HttpContext.RequestAborted);
+
+            var resource = new[] { new ActionResponse { Id = actionResponseId } };
+
+            await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
+        }
+
+        private async Task InvokePin(HttpRequest req, HttpResponse res, RouteData routeData)
+        {
+            var model = req.BindAndValidate<ActionRequestResource<InvokePinActionFieldResource>>();
+
+            if (!model.ValidationResult.IsValid)
+            {
+                throw new ValidationException(model.ValidationResult.Errors);
+            }
+
+            var actionResponseId = await this.linnApiProxy.InvokePin(
+                                       req.GetAccessToken(),
+                                       model.Data.ActionFields.Device_Id,
+                                       model.Data.ActionFields.Pin_Id,
+                                       req.HttpContext.RequestAborted);
 
             var resource = new[] { new ActionResponse { Id = actionResponseId } };
 

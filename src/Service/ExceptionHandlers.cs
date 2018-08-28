@@ -35,6 +35,7 @@
                                     await context.Response.AsJson(new ErrorResource(linnApiException.Message, false), context.RequestAborted);
                                     break;
                                 case HttpStatusCode.NotFound:
+                                case HttpStatusCode.BadRequest:
                                     context.Response.StatusCode = 400;
                                     await context.Response.AsJson(new ErrorResource(linnApiException.Message, true), context.RequestAborted);
                                     break;
