@@ -5,6 +5,9 @@ provider:
   stage: production
   region: eu-west-1
   logRetentionInDays: 7
+  tags:
+    cit: IT
+    Name: linn-api-ifttt
 
 package:
   artifact: package.zip

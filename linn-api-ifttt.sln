@@ -20,10 +20,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CI", "CI", "{D4900267-C132-4A16-AE9D-3D1630A3F728}"
 	ProjectSection(SolutionItems) = preProject
 		.travis.yml = .travis.yml
-		aws-lambda-tools-defaults.json = aws-lambda-tools-defaults.json
 		Dockerfile = Dockerfile
 		README.md = README.md
-		serverless.template = serverless.template
 		serverless.yml = serverless.yml
 	EndProjectSection
 EndProject

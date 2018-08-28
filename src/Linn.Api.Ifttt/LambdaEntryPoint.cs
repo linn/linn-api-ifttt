@@ -7,8 +7,8 @@ namespace Linn.Api.Ifttt
     {
         protected override void Init(IWebHostBuilder builder)
         {
-            builder
-                .UseStartup<Startup>().ConfigureLogging((ctx, logging) => { logging.AddFilter(null, LogLevel.Error); });
+            builder.UseStartup<Startup>()
+                .ConfigureLogging((ctx, logging) => { logging.AddFilter(null, LogLevel.Critical); });
         }
     }
 }
