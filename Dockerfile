@@ -1,5 +1,6 @@
 FROM microsoft/dotnet:2.1-sdk AS build
-COPY . /repo
+COPY ./src /repo/src
+COPY ./test /repo/test
 WORKDIR /repo
 RUN dotnet test test/Integration.Tests/
 RUN dotnet test test/Unit.Tests/
