@@ -8,6 +8,7 @@ provider:
   tags:
     cit: IT
     Name: linn-api-ifttt
+    Environment: prod
 
 package:
   artifact: package.zip
@@ -17,7 +18,7 @@ functions:
     handler: "Linn.Api.Ifttt::Linn.Api.Ifttt.LambdaEntryPoint::FunctionHandlerAsync"
     description: IFTTT Backend
     runtime: dotnetcore2.1
-    timeout: 30
+    timeout: 10
     memorySize: 256
     environment:
         discoveryEndpoint: https://www.linn.co.uk/auth
