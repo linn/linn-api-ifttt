@@ -6,24 +6,36 @@ The NuGet package [Amazon.Lambda.AspNetCoreServer](https://www.nuget.org/package
 
 From there, Botwin is used as a shim over ASP.NET to provide Nancy style routing, binding and negotiation. 
 
-## Here are some steps to follow from Visual Studio:
+## Test
 
-To deploy your Serverless application, right click the project in Solution Explorer and select *Publish to AWS Lambda*.
-
-To view your deployed application open the Stack View window by double-clicking the stack name shown beneath the AWS CloudFormation node in the AWS Explorer tree. The Stack View also displays the root URL to your published application.
-
-## Here are some steps to follow to get started from the command line:
-
-Once you have edited your template and code you can use the following command lines to deploy your application from the command line (these examples assume the project name is *Linn.Api.Ifttt*):
-
-### Execute unit tests
 ```
     dotnet test test/Integration.Tests/
     dotnet test test/Unit.Tests/
 ```
 
-### Deploy application
+## Deploy
+
+Use Docker to build a deployment container:
+
+```bash
+docker build -t deploy .
 ```
-    cd "src/Linn.Api.Ifttt"
-    dotnet lambda deploy-serverless -cfg ../../aws-lambda-tools-defaults.json -t ../../serverless.template
+
+Put deployment credentials in an `.env` file:
+
+```
+IFTTT_SERVICE_KEY=
+IFTTT_TEST_CLIENT_ID=
+IFTTT_TEST_CLIENT_SECRET=
+IFTTT_TEST_USERNAME=
+IFTTT_TEST_PASSWORD=
+AWS_DEFAULT_REGION=...
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+```
+
+and
+
+```bash
+docker run --env-file=.env deploy
 ```
