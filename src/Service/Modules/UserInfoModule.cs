@@ -2,8 +2,8 @@ namespace Linn.Api.Ifttt.Service.Modules
 {
     using System.Threading.Tasks;
 
-    using Botwin;
-    using Botwin.Response;
+    using Carter;
+    using Carter.Response;
 
     using Linn.Api.Ifttt.Resources.Ifttt;
     using Linn.Api.Ifttt.Service.Factories;
@@ -11,7 +11,7 @@ namespace Linn.Api.Ifttt.Service.Modules
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
 
-    public class UserInfoModule : BotwinModule
+    public class UserInfoModule : CarterModule
     {
         private readonly IUserResourceFactory userResourceFactory;
 

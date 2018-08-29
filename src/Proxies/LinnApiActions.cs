@@ -125,6 +125,22 @@ namespace Linn.Api.Ifttt.Proxies
             return DateTime.UtcNow.ToString("o");
         }
 
+        public async Task<string> InvokePin(string accessToken, string deviceId, string pinId, CancellationToken ct)
+        {
+            var uri = new Uri($"{this.apiRoot}/players/{deviceId}/play");
+
+            var parameters = new Dictionary<string, string> { { "pinId", pinId } };
+
+            var statusCode = await this.restClient.Put(ct, uri, parameters, Headers(accessToken), null);
+
+            if (statusCode != HttpStatusCode.OK)
+            {
+                throw new LinnApiException(statusCode);
+            }
+
+            return DateTime.UtcNow.ToString("o");
+        }
+
         public async Task<IDictionary<string, string>> GetPlaylistNames(string accessToken, CancellationToken ct)
         {
             var playlists = await this.ListAllPlaylists(accessToken, ct);

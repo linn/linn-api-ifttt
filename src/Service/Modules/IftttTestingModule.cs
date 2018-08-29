@@ -5,8 +5,8 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Botwin;
-    using Botwin.Response;
+    using Carter;
+    using Carter.Response;
 
     using IdentityModel.Client;
 
@@ -18,7 +18,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
 
-    public class IftttTestingModule : BotwinModule
+    public class IftttTestingModule : CarterModule
     {
         private readonly ILinnApiActions actions;
 
@@ -49,7 +49,8 @@
                                            deviceId,
                                            playlistId),
                                        mute_device = DeviceSampleData(deviceId),
-                                       unmute_device = DeviceSampleData(deviceId)
+                                       unmute_device = DeviceSampleData(deviceId),
+                                       invoke_pin = PlayPinSampleData(deviceId)
                                },
                            ActionRecordSkipping = new ActionSamples
                                                       {
@@ -64,7 +65,8 @@
                                                                   deviceId,
                                                                   "UNKNOWN_PLAYLIST"),
                                                           mute_device = DeviceSampleData("UNKNOWN_DEVICE"),
-                                                          unmute_device = DeviceSampleData("UNKNOWN_DEVICE")
+                                                          unmute_device = DeviceSampleData("UNKNOWN_DEVICE"),
+                                                          invoke_pin = PlayPinSampleData("UNKNOWN_DEVICE")
                                                       }
                        };
         }
@@ -99,6 +101,15 @@
             return new Dictionary<string, string>
                        {
                            { "device_id", deviceId }
+                       };
+        }
+
+        private static Dictionary<string, string> PlayPinSampleData(string deviceId)
+        {
+            return new Dictionary<string, string>
+                       {
+                           { "device_id", deviceId },
+                           { "pin_id", "3" }
                        };
         }
 

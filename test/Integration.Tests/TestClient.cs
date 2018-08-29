@@ -1,12 +1,15 @@
-﻿namespace Linn.Api.Ifttt.Testing.Integration
+﻿using Xunit;
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
+
+namespace Linn.Api.Ifttt.Testing.Integration
 {
     using System;
     using System.Net.Http;
 
-    using Botwin;
+    using Carter;
 
     using Linn.Api.Ifttt.Service;
-    using Linn.Api.Ifttt.Service.Modules;
 
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Builder;
@@ -19,17 +22,16 @@
         public HttpClient With(Action<IServiceCollection> addDependencies)
         {
             var server = new TestServer(
-                WebHost.CreateDefaultBuilder()
-                    .ConfigureServices(
-                        services =>
-                            {
-                                addDependencies(services);
-                                services.AddBotwin(typeof(UserInfoModule).Assembly);
-                            })
-                    .Configure(app =>
+                WebHost.CreateDefaultBuilder().ConfigureServices(
+                    services =>
+                        {
+                            services.AddCarter();
+                            addDependencies(services);
+                        }).Configure(
+                    app =>
                         {
                             app.UseExceptionHandler(ExceptionHandlers.Handlers);
-                            app.UseBotwin();
+                            app.UseCarter();
                         }));
 
             var client = server.CreateClient();

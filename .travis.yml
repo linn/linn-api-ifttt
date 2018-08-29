@@ -1,6 +1,8 @@
-language: csharp
-dotnet: 2.0.3
-mono: none
+sudo: required
+services:
+- docker
 script:
-  - dotnet test test/Integration.Tests/
-  - dotnet test test/Unit.Tests/
+- docker build -t deploy .
+after_success:
+- openssl aes-256-cbc -K $encrypted_9ca81b5594f5_key -iv $encrypted_9ca81b5594f5_iv -in .env.enc -out .env -d
+- docker run --env-file=.env deploy

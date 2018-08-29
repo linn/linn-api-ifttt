@@ -17,6 +17,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit.Tests", "test\Unit.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Integration.Tests", "test\Integration.Tests\Integration.Tests.csproj", "{8DBDA8C3-4587-48BB-9947-00E2FE535303}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CI", "CI", "{D4900267-C132-4A16-AE9D-3D1630A3F728}"
+	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
+		Dockerfile = Dockerfile
+		README.md = README.md
+		serverless.yml = serverless.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
