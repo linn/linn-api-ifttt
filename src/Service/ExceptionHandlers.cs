@@ -24,9 +24,7 @@
                         case InvalidServiceKeyException _:
                             context.Response.StatusCode = 401;
                             break;
-                        case LinnApiException _:
-                            var linnApiException = (LinnApiException)ex.Error;
-
+                        case LinnApiException linnApiException:
                             switch (linnApiException.StatusCode)
                             {
                                 case HttpStatusCode.Forbidden:
@@ -46,9 +44,7 @@
                             }
 
                             break;
-                        case FluentValidation.ValidationException _:
-                            var validationException = (FluentValidation.ValidationException)ex.Error;
-
+                        case FluentValidation.ValidationException validationException:
                             var errorMessages = validationException.Errors.Select(m => new ErrorMessage(m.ErrorMessage, string.Empty)).ToArray();
 
                             context.Response.StatusCode = 400;

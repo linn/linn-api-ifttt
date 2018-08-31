@@ -4,7 +4,7 @@ This project is a ASP.NET Core Web API project run in AWS Lambda exposed through
 
 The NuGet package [Amazon.Lambda.AspNetCoreServer](https://www.nuget.org/packages/Amazon.Lambda.AspNetCoreServer) contains a Lambda function that is used to translate requests from API Gateway into the ASP.NET Core framework and then the responses from ASP.NET Core back to API Gateway.
 
-From there, Botwin is used as a shim over ASP.NET to provide Nancy style routing, binding and negotiation. 
+From there, Carter is used as a shim over ASP.NET to provide Nancy style routing, binding and negotiation. 
 
 ## Test
 
