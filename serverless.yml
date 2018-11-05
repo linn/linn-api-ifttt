@@ -30,3 +30,7 @@ functions:
         testPassword: ${env:IFTTT_TEST_PASSWORD}
     events:
       - http: ANY {proxy+}
+    tags:
+      Project: ifttt
+      CIT: it
+      Name: ifttt-v2
