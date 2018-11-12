@@ -13,22 +13,18 @@
 
   using Xunit;
 
-  public class WhePlayingAPlaylistOnASpecificDeviceFails : ContextBase
+  public class WhePlayingAnUnknownPlaylist : ContextBase
   {
-    private readonly HttpStatusCode statusCode;
-
     private readonly Action action;
 
-    public WhePlayingAPlaylistOnASpecificDeviceFails()
+    public WhePlayingAnUnknownPlaylist()
     {
-      this.statusCode = HttpStatusCode.Unauthorized;
-
       this.RestClient.Put(
           Arg.Any<CancellationToken>(),
           Arg.Any<Uri>(),
           Arg.Any<Dictionary<string, string>>(),
           Arg.Any<Dictionary<string, string[]>>(),
-          Arg.Any<object>()).Returns(this.statusCode);
+          Arg.Any<object>()).Returns(HttpStatusCode.Forbidden);
 
       this.action = () => this.Sut.PlayPlaylist(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), CancellationToken.None).Wait();
     }
@@ -36,7 +32,7 @@
     [Fact]
     public void ShouldThrowLinnApiException()
     {
-      this.action.Should().Throw<LinnApiException>().And.StatusCode.Should().Be(this.statusCode);
+      this.action.Should().Throw<LinnApiException>().And.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
   }
 }
