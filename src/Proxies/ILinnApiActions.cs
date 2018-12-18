@@ -23,5 +23,9 @@
         Task<string> InvokePin(string accessToken, string deviceId, string pinId, CancellationToken ct);
 
         Task<IDictionary<string, string>> GetPlaylistNames(string accessToken, CancellationToken ct);
+
+        Task<IDictionary<string, string>> GetDeviceSourceNames(string accessToken, string deviceId, CancellationToken ct);
+
+        Task<string> SelectSource(string accessToken, string deviceId, string sourceId, CancellationToken ct);
     }
 }
