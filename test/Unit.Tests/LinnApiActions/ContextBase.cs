@@ -25,8 +25,16 @@
         protected static PlayerResource GeneratePlayerResource()
         {
             var id = Guid.NewGuid().ToString();
-            var resource = new PlayerResource { Id = id };
+            var sources = new SourceResource[] { GenerateSourceResource(), GenerateSourceResource() };
+            var resource = new PlayerResource { Id = id, Sources = sources };
             resource.Links.Add(new LinkResource("standby", $"/{Guid.NewGuid().ToString()}"));
+            return resource;
+        }
+
+        protected static SourceResource GenerateSourceResource()
+        {
+            var id = Guid.NewGuid().ToString();
+            var resource = new SourceResource { Id = id, Visible = true };
             return resource;
         }
 
