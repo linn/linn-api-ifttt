@@ -39,6 +39,9 @@
             this.Post("/ifttt/v1/actions/unmute_device/fields/device_id/options", this.ListDevices);
             this.Post("/ifttt/v1/actions/invoke_pin", this.InvokePin);
             this.Post("/ifttt/v1/actions/invoke_pin/fields/device_id/options", this.ListDevices);
+            this.Post("/ifttt/v1/actions/select_source", this.SelectSource);
+            this.Post("/ifttt/v1/actions/select_source/fields/source_id/options", this.ListDeviceSources);
+            this.Post("/ifttt/v1/actions/select_source/fields/device_id/options", this.ListDevices);
         }
 
         private async Task UnmuteDevice(HttpRequest req, HttpResponse res, RouteData routeData)
@@ -103,6 +106,26 @@
                                         req.GetAccessToken(),
                                         model.Data.ActionFields.Device_Id,
                                         req.HttpContext.RequestAborted);
+
+            var resource = new[] { new ActionResponse { Id = actionResponseId } };
+
+            await res.AsJson(new DataResource<ActionResponse[]>(resource), req.HttpContext.RequestAborted);
+        }
+
+        private async Task SelectSource(HttpRequest req, HttpResponse res, RouteData routeData)
+        {
+            var model = req.BindAndValidate<ActionRequestResource<SelectSourceActionFieldResource>>();
+
+            if (!model.ValidationResult.IsValid)
+            {
+                throw new ValidationException(model.ValidationResult.Errors);
+            }
+
+            var actionResponseId = await this.linnApiProxy.SelectSource(
+                                       req.GetAccessToken(),
+                                       model.Data.ActionFields.Device_Id,
+                                       model.Data.ActionFields.Source_Id,
+                                       req.HttpContext.RequestAborted);
 
             var resource = new[] { new ActionResponse { Id = actionResponseId } };
 
@@ -189,6 +212,23 @@
 
             var actionFieldOptions =
                 players.Select(p => new ActionFieldOption { Label = p.Value, Value = p.Key }).ToArray();
+
+            await res.AsJson(new DataResource<ActionFieldOption[]>(actionFieldOptions), req.HttpContext.RequestAborted);
+        }
+
+        private async Task ListDeviceSources(HttpRequest req, HttpResponse res, RouteData routeData)
+        {
+            var model = req.BindAndValidate<ActionRequestResource<DeviceActionFieldResource>>();
+
+            if (!model.ValidationResult.IsValid)
+            {
+                throw new ValidationException(model.ValidationResult.Errors);
+            }
+
+            var sources = await this.linnApiProxy.GetDeviceSourceNames(req.GetAccessToken(), model.Data.ActionFields.Device_Id, req.HttpContext.RequestAborted);
+
+            var actionFieldOptions =
+                sources.Select(p => new ActionFieldOption { Label = p.Value, Value = p.Key }).ToArray();
 
             await res.AsJson(new DataResource<ActionFieldOption[]>(actionFieldOptions), req.HttpContext.RequestAborted);
         }
