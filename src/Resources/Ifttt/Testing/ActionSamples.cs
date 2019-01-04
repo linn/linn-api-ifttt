@@ -17,5 +17,7 @@ namespace Linn.Api.Ifttt.Resources.Ifttt.Testing
         public Dictionary<string, string> unmute_device { get; set; }
 
         public Dictionary<string, string> invoke_pin { get; set; }
+
+        public Dictionary<string, string> select_source { get; set; }
     }
 }

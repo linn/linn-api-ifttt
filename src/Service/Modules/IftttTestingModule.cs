@@ -50,7 +50,8 @@
                                            playlistId),
                                        mute_device = DeviceSampleData(deviceId),
                                        unmute_device = DeviceSampleData(deviceId),
-                                       invoke_pin = PlayPinSampleData(deviceId)
+                                       invoke_pin = PlayPinSampleData(deviceId),
+                                       select_source = PlaySourceSampleData(deviceId),
                                },
                            ActionRecordSkipping = new ActionSamples
                                                       {
@@ -66,7 +67,8 @@
                                                                   "UNKNOWN_PLAYLIST"),
                                                           mute_device = DeviceSampleData("UNKNOWN_DEVICE"),
                                                           unmute_device = DeviceSampleData("UNKNOWN_DEVICE"),
-                                                          invoke_pin = PlayPinSampleData("UNKNOWN_DEVICE")
+                                                          invoke_pin = PlayPinSampleData("UNKNOWN_DEVICE"),
+                                                          select_source = PlaySourceSampleData("UNKNOWN_DEVICE"),
                                                       }
                        };
         }
@@ -110,6 +112,15 @@
                        {
                            { "device_id", deviceId },
                            { "pin_id", "3" }
+                       };
+        }
+
+        private static Dictionary<string, string> PlaySourceSampleData(string deviceId)
+        {
+            return new Dictionary<string, string>
+                       {
+                           { "device_id", deviceId },
+                           { "source_id", "Playlist" }
                        };
         }
 
