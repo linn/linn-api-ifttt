@@ -30,10 +30,11 @@
             this.Post("/ifttt/v1/test/setup", this.GenerateTestData);
         }
 
-        private static TestSamples GenerateSamples(IEnumerable<string> deviceIds, IEnumerable<string> playlistIds)
+        private static TestSamples GenerateSamples(IEnumerable<string> deviceIds, IEnumerable<string> playlistIds, IEnumerable<string> sourceIds)
         {
             var deviceId = deviceIds.FirstOrDefault();
             var playlistId = playlistIds.FirstOrDefault();
+            var sourceId = sourceIds.FirstOrDefault();
 
             return new TestSamples
                        {
@@ -51,7 +52,7 @@
                                        mute_device = DeviceSampleData(deviceId),
                                        unmute_device = DeviceSampleData(deviceId),
                                        invoke_pin = PlayPinSampleData(deviceId),
-                                       select_source = PlaySourceSampleData(deviceId),
+                                       select_source = PlaySourceSampleData(deviceId, sourceId),
                                },
                            ActionRecordSkipping = new ActionSamples
                                                       {
@@ -68,7 +69,7 @@
                                                           mute_device = DeviceSampleData("UNKNOWN_DEVICE"),
                                                           unmute_device = DeviceSampleData("UNKNOWN_DEVICE"),
                                                           invoke_pin = PlayPinSampleData("UNKNOWN_DEVICE"),
-                                                          select_source = PlaySourceSampleData("UNKNOWN_DEVICE"),
+                                                          select_source = PlaySourceSampleData(deviceId, "UNKNOWN SOURCE"),
                                                       }
                        };
         }
@@ -115,12 +116,12 @@
                        };
         }
 
-        private static Dictionary<string, string> PlaySourceSampleData(string deviceId)
+        private static Dictionary<string, string> PlaySourceSampleData(string deviceId, string sourceId)
         {
             return new Dictionary<string, string>
                        {
                            { "device_id", deviceId },
-                           { "source_id", "Playlist" }
+                           { "source_id", sourceId }
                        };
         }
 
@@ -154,10 +155,16 @@
 
             var playlists = await this.actions.GetPlaylistNames(accessToken, res.HttpContext.RequestAborted);
 
+            var tasks = devices.Select(d => this.actions.GetDeviceSourceNames(accessToken, d.Key, res.HttpContext.RequestAborted));
+
+            var results = await Task.WhenAll(tasks.ToArray());
+
+            var sources = results.SelectMany(r => r.Keys);
+
             var testData = new TestDataResource
                                {
                                    AccessToken = accessToken,
-                                   Samples = GenerateSamples(devices.Keys, playlists.Keys)
+                                   Samples = GenerateSamples(devices.Keys, playlists.Keys, sources)
                                };
 
             await res.AsJson(new DataResource<TestDataResource>(testData));
