@@ -40,7 +40,7 @@
             this.Post("/ifttt/v1/actions/invoke_pin", this.InvokePin);
             this.Post("/ifttt/v1/actions/invoke_pin/fields/device_id/options", this.ListDevices);
             this.Post("/ifttt/v1/actions/select_source", this.SelectSource);
-            this.Post("/ifttt/v1/actions/select_source/fields/source_id/options", this.ListDeviceSources);
+            this.Post("/ifttt/v1/actions/select_source/fields/source_id/options", this.ListSources);
             this.Post("/ifttt/v1/actions/select_source/fields/device_id/options", this.ListDevices);
         }
 
@@ -216,16 +216,15 @@
             await res.AsJson(new DataResource<ActionFieldOption[]>(actionFieldOptions), req.HttpContext.RequestAborted);
         }
 
-        private async Task ListDeviceSources(HttpRequest req, HttpResponse res, RouteData routeData)
+        private async Task ListSources(HttpRequest req, HttpResponse res, RouteData routeData)
         {
-            var model = req.BindAndValidate<ActionRequestResource<DeviceActionFieldResource>>();
+            var players = await this.linnApiProxy.GetDeviceNames(req.GetAccessToken(), req.HttpContext.RequestAborted);
 
-            if (!model.ValidationResult.IsValid)
-            {
-                throw new ValidationException(model.ValidationResult.Errors);
-            }
+            var tasks = players.Select(p => this.linnApiProxy.GetDeviceSourceNames(req.GetAccessToken(), p.Key, req.HttpContext.RequestAborted));
 
-            var sources = await this.linnApiProxy.GetDeviceSourceNames(req.GetAccessToken(), model.Data.ActionFields.Device_Id, req.HttpContext.RequestAborted);
+            var results = await Task.WhenAll(tasks.ToArray());
+
+            var sources = results.SelectMany(r => r);
 
             var actionFieldOptions =
                 sources.Select(p => new ActionFieldOption { Label = p.Value, Value = p.Key }).ToArray();
