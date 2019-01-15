@@ -11,10 +11,8 @@ namespace Linn.Api.Ifttt.Service.Validators
             this.RuleFor(c => c.ActionFields).NotNull().WithMessage("`actionFields` missing").DependentRules(
                 rules =>
                 {
-                    rules.RuleFor(c => c.ActionFields.Device_Id).NotEmpty()
-                        .WithMessage("Action field `device_id` missing");
-                    rules.RuleFor(c => c.ActionFields.Source_Id).NotEmpty()
-                        .WithMessage("Action field `source_id` missing");
+                    rules.RuleFor(c => c.ActionFields.DeviceSource_Id).NotEmpty()
+                        .WithMessage("Action field `devicesource_id` missing");
                 });
         }
     }

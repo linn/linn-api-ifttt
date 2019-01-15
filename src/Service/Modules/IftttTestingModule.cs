@@ -17,6 +17,7 @@
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
+    using Newtonsoft.Json;
 
     public class IftttTestingModule : CarterModule
     {
@@ -120,8 +121,7 @@
         {
             return new Dictionary<string, string>
                        {
-                           { "device_id", deviceId },
-                           { "source_id", sourceId }
+                           { "source_id", JsonConvert.SerializeObject(new SelectSourceActionFieldResource.DeviceSourceResource { DeviceId = deviceId, SourceId = sourceId }) }
                        };
         }
 

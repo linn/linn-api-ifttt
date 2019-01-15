@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class ActionRequestResource<T> where T : DeviceActionFieldResource
+    public class ActionRequestResource<T> where T : ActionFieldResource
     {
         public T ActionFields { get; set; }
 

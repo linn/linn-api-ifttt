@@ -26,7 +26,7 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
 
             var request = new
             {
-                actionFields = new { device_id = deviceId, source_id = sourceId },
+                actionFields = new { devicesource_id = JsonConvert.SerializeObject(new { DeviceId = deviceId, SourceId = sourceId }) },
                 ifttt_source = new { id = "2", url = "https://ifttt.com/myrecipes/personal/2" },
                 user = new { timezone = "Pacific Time (US & Canada)" }
             };

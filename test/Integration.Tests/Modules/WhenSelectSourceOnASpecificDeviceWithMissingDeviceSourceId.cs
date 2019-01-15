@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+
 using FluentAssertions;
+
 using Linn.Api.Ifttt.Resources.Ifttt;
+
 using Newtonsoft.Json;
+
 using Xunit;
 
 namespace Linn.Api.Ifttt.Testing.Integration.Modules
 {
-    public class WhenSelectSourceOnASpecificDeviceWithMissingSourceIdorDeviceId : ContextBase
+    public class WhenSelectSourceOnASpecificDeviceWithMissingDeviceSourceId : ContextBase
     {
         private readonly HttpResponseMessage response;
 
         private readonly ErrorResource result;
 
-        public WhenSelectSourceOnASpecificDeviceWithMissingSourceIdorDeviceId()
+        public WhenSelectSourceOnASpecificDeviceWithMissingDeviceSourceId()
         {
+            var sourceId = Guid.NewGuid().ToString();
+
             var request = new
             {
                 actionFields = new { },
@@ -41,9 +47,8 @@ namespace Linn.Api.Ifttt.Testing.Integration.Modules
         [Fact]
         public void ShouldDescribeError()
         {
-            this.result.Errors.Should().HaveCount(2);
-            this.result.Errors.Should().Contain(e => e.Message == "Action field `source_id` missing");
-            this.result.Errors.Should().Contain(e => e.Message == "Action field `device_id` missing");
+            this.result.Errors.Should().HaveCount(1);
+            this.result.Errors[0].Message.Should().Be("Action field `devicesource_id` missing");
         }
     }
 }

@@ -14,6 +14,7 @@
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Routing;
+    using Newtonsoft.Json;
 
     public class ActionsModule : CarterModule
     {
@@ -40,8 +41,7 @@
             this.Post("/ifttt/v1/actions/invoke_pin", this.InvokePin);
             this.Post("/ifttt/v1/actions/invoke_pin/fields/device_id/options", this.ListDevices);
             this.Post("/ifttt/v1/actions/select_source", this.SelectSource);
-            this.Post("/ifttt/v1/actions/select_source/fields/source_id/options", this.ListSources);
-            this.Post("/ifttt/v1/actions/select_source/fields/device_id/options", this.ListDevices);
+            this.Post("/ifttt/v1/actions/select_source/fields/devicesource_id/options", this.ListSources);
         }
 
         private async Task UnmuteDevice(HttpRequest req, HttpResponse res, RouteData routeData)
@@ -121,10 +121,12 @@
                 throw new ValidationException(model.ValidationResult.Errors);
             }
 
+            var deviceSource = JsonConvert.DeserializeObject<SelectSourceActionFieldResource.DeviceSourceResource>(model.Data.ActionFields.DeviceSource_Id);
+
             var actionResponseId = await this.linnApiProxy.SelectSource(
                                        req.GetAccessToken(),
-                                       model.Data.ActionFields.Device_Id,
-                                       model.Data.ActionFields.Source_Id,
+                                       deviceSource.DeviceId,
+                                       deviceSource.SourceId,
                                        req.HttpContext.RequestAborted);
 
             var resource = new[] { new ActionResponse { Id = actionResponseId } };
@@ -220,14 +222,18 @@
         {
             var players = await this.linnApiProxy.GetDeviceNames(req.GetAccessToken(), req.HttpContext.RequestAborted);
 
-            var tasks = players.Select(p => this.linnApiProxy.GetDeviceSourceNames(req.GetAccessToken(), p.Key, req.HttpContext.RequestAborted));
+            var tasks = players.Select(p => this.linnApiProxy.GetDeviceSourceNames(req.GetAccessToken(), p.Key, req.HttpContext.RequestAborted))
+                               .ToArray();
 
-            var results = await Task.WhenAll(tasks.ToArray());
+            await Task.WhenAll(tasks);
 
-            var sources = results.SelectMany(r => r);
-
-            var actionFieldOptions =
-                sources.Select(p => new ActionFieldOption { Label = p.Value, Value = p.Key }).ToArray();
+            var actionFieldOptions = players.Select((p, i) => tasks[i].Result.Select(s =>
+                                                                new ActionFieldOption {
+                                                                    Label = $"{p.Value}:{s.Value}",
+                                                                    Value = JsonConvert.SerializeObject(new SelectSourceActionFieldResource.DeviceSourceResource { DeviceId = p.Key, SourceId = s.Key })
+                                                                }))
+                                            .SelectMany(r => r)
+                                            .ToArray();
 
             await res.AsJson(new DataResource<ActionFieldOption[]>(actionFieldOptions), req.HttpContext.RequestAborted);
         }
