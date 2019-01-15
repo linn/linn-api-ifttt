@@ -121,7 +121,7 @@
         {
             return new Dictionary<string, string>
                        {
-                           { "source_id", JsonConvert.SerializeObject(new SelectSourceActionFieldResource.DeviceSourceResource { DeviceId = deviceId, SourceId = sourceId }) }
+                           { "devicesource_id", JsonConvert.SerializeObject(new SelectSourceActionFieldResource.DeviceSourceResource { DeviceId = deviceId, SourceId = sourceId }) }
                        };
         }
 
